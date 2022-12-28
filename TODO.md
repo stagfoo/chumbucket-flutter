@@ -1,3 +1,3 @@
-ListView
-Colors are a class
-Builder (kinda like normalizers)
+- ListView
+- Colors are a class
+- Builder (kinda like normalizers)
