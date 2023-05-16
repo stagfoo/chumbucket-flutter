@@ -1,5 +1,0 @@
-setup design system like normal chumbucket
-setup nice statemangage organization
-create the 6 files (ui,url,actions,store,main,styles)
-do a fetch network call
-add build instructures
