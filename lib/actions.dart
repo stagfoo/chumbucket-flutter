@@ -8,14 +8,20 @@ import 'middleware.dart';
 import 'store.dart';
 
 Future<void> onPressMangaBookItem(GlobalState state, dynamic item) async {
-  var files = await getFilesFromFolder(item['chapterDirs'][0]);
-  if (files == []) {
+  try {
+    var chapterFileDir = item['chapterDirs'][0];
+    var files = await getFilesFromFolder(chapterFileDir);
+    if (files == []) {
+      Get.toNamed('/home');
+    } else {
+      state.loadMangaBook(files);
+      state.resetPage();
+      reloadBubbleList(state);
+      Get.toNamed('/reading');
+    }
+  } catch (err) {
+    print("unable to load chapterDirs");
     Get.toNamed('/home');
-  } else {
-    state.loadMangaBook(files);
-    state.resetPage();
-    reloadBubbleList(state);
-    Get.toNamed('/reading');
   }
 }
 
@@ -126,5 +132,25 @@ void loadConfig(GlobalState state) async {
     state.setBookList(nextBookList);
   } else {
     File(localDBFile).writeAsString('');
+  }
+}
+
+void bottomBarAddBook(GlobalState state) async {
+  try {
+    var files = await getFiles();
+    state.loadMangaBook(files);
+    state.resetPage();
+    Get.toNamed('/reading');
+    var firstImage = files[0] as File;
+    var folder = firstImage.parent.parent.path.toString();
+    state.addMangaBook({
+      "cover": folder,
+      "folder": folder,
+      "chapterDirs": [folder]
+    });
+    saveDB(localDBFile, state);
+  } catch (err) {
+    print("File open canceled");
+    Get.toNamed('/home');
   }
 }

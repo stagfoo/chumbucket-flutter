@@ -325,14 +325,7 @@ class BottomBar extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () async {
-                  var files = await getFiles();
-                  if (files == []) {
-                    Get.toNamed('/home');
-                  } else {
-                    state.loadMangaBook(files);
-                    state.resetPage();
-                    Get.toNamed('/reading');
-                  }
+                  bottomBarAddBook(state);
                 },
                 icon: const Icon(Icons.book_outlined, color: Colors.black),
               ),

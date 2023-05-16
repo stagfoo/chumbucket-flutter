@@ -15,44 +15,55 @@ Future<String?> pickDir() async {
 }
 
 Future<List> getDirs() async {
-  var root = await FilePicker.platform.getDirectoryPath();
-  if (root == null) {
-    return [];
-  }
-  var list = [];
-  List contents = Directory(root).listSync();
-  for (var fileOrDir in contents) {
-    if (fileOrDir is Directory) {
-      list.add(fileOrDir);
+  try {
+    var root = await FilePicker.platform.getDirectoryPath();
+    if (root == null) {
+      return [];
     }
+    var list = [];
+    List contents = Directory(root).listSync();
+    for (var fileOrDir in contents) {
+      if (fileOrDir is Directory) {
+        list.add(fileOrDir);
+      }
+    }
+    return list;
+  } catch (err) {
+    rethrow;
   }
-  return list;
 }
 
 Future<List> getFiles() async {
-  var root = await FilePicker.platform.getDirectoryPath();
-  if (root == null) {
-    return [];
-  }
-  var list = [];
-  List contents = Directory(root).listSync();
-  for (var fileOrDir in contents) {
-    if (fileOrDir is File) {
-      //TODO filter by extension
-      list.add(fileOrDir);
+  try {
+    var root = await FilePicker.platform.getDirectoryPath();
+    var list = [];
+    List contents = Directory(root!).listSync();
+    for (var fileOrDir in contents) {
+      if (fileOrDir is File) {
+        //TODO filter by extension
+        list.add(fileOrDir);
+      }
     }
+    return list;
+  } catch (err) {
+    print("Get Files failed or canceled");
+    rethrow;
   }
-  return list;
 }
 
 Future<List> getFilesFromFolder(String root) async {
-  var list = [];
-  List contents = Directory(root).listSync();
-  for (var fileOrDir in contents) {
-    if (fileOrDir is File) {
-      //TODO filter by extension
-      list.add(fileOrDir);
+  try {
+    var list = [];
+    List contents = Directory(root).listSync();
+    for (var fileOrDir in contents) {
+      if (fileOrDir is File) {
+        //TODO filter by extension
+        list.add(fileOrDir);
+      }
     }
+    return list;
+  } catch (err) {
+    print("Get Files from folder failed or canceled");
+    rethrow;
   }
-  return list;
 }
