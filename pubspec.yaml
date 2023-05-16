@@ -42,7 +42,6 @@ dependencies:
   mangadex_library: ^1.4.5
   backdrop: ^0.8.1
   file_picker: ^5.2.4
-  flutter_file_manager: ^0.2.0
   floating_bottom_navigation_bar: ^1.5.2
   slugid: ^1.1.1
   toml: ^0.13.1

@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:flutter_file_manager/flutter_file_manager.dart';
+// import 'package:file_manager/file_manager.dart';
 import 'dart:io';
 
 //return type   // name   // async
@@ -13,36 +14,45 @@ Future<String?> pickDir() async {
   return selectedDirectory;
 }
 
-Future<List<Directory>> getDirs() async {
+Future<List> getDirs() async {
   var root = await FilePicker.platform.getDirectoryPath();
   if (root == null) {
     return [];
   }
-  var fm = FileManager(root: Directory(root)); //
-  var dirs = await fm.dirsTree();
-  return dirs;
+  var list = [];
+  List contents = Directory(root).listSync();
+  for (var fileOrDir in contents) {
+    if (fileOrDir is Directory) {
+      list.add(fileOrDir);
+    }
+  }
+  return list;
 }
 
-
-Future<List<File>> getFiles() async {
+Future<List> getFiles() async {
   var root = await FilePicker.platform.getDirectoryPath();
   if (root == null) {
     return [];
   }
-  var fm = FileManager(root: Directory(root)); //
-  var files = await fm.filesTree(extensions: [
-    "png",
-    "jpg",
-    "jpeg"
-  ]);
-  return files;
+  var list = [];
+  List contents = Directory(root).listSync();
+  for (var fileOrDir in contents) {
+    if (fileOrDir is File) {
+      //TODO filter by extension
+      list.add(fileOrDir);
+    }
+  }
+  return list;
 }
-Future<List<File>> getFilesFromFolder(String root) async {
-  var fm = FileManager(root: Directory(root)); //
-  var files = await fm.filesTree(extensions: [
-    "png",
-    "jpg",
-    "jpeg"
-  ]);
-  return files;
+
+Future<List> getFilesFromFolder(String root) async {
+  var list = [];
+  List contents = Directory(root).listSync();
+  for (var fileOrDir in contents) {
+    if (fileOrDir is File) {
+      //TODO filter by extension
+      list.add(fileOrDir);
+    }
+  }
+  return list;
 }
