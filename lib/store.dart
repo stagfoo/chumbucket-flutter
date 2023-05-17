@@ -17,7 +17,7 @@ class Bubble {
 }
 
 class MangaBook {
-  File cover = File('');
+  String cover = '';
   List<String> chapterDirs = [];
   List<Bubble> bubbles = [];
   int lastChapterRead = 0;
@@ -27,7 +27,8 @@ class MangaBook {
 class GlobalState extends ChangeNotifier {
   int currentPageNumber = 0;
   List book = [];
-  List bookList = [];
+  MangaBook selectedBook = MangaBook();
+  List<MangaBook> bookList = [];
   String addBookCover = '';
   List<String> addBookChapters = [];
   List<Bubble> bubbleList = [];
@@ -40,6 +41,11 @@ class GlobalState extends ChangeNotifier {
 
   void loadMangaBook(files) {
     book = files;
+    notifyListeners();
+  }
+
+  void selectMangaBook(MangaBook book) {
+    selectedBook = book;
     notifyListeners();
   }
 
@@ -69,12 +75,12 @@ class GlobalState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setBookList(list) {
+  void setBookList(List<MangaBook> list) {
     bookList = list;
     notifyListeners();
   }
 
-  void addMangaBook(book) {
+  void addMangaBook(MangaBook book) {
     bookList.add(book);
     notifyListeners();
   }

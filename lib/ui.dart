@@ -121,12 +121,32 @@ class AddMangaBookPage extends StatelessWidget {
 
 //--------------------------------------------------------------
 
-class ChapterView extends StatelessWidget {
-  const ChapterView({Key? key}) : super(key: key);
+class MangaBookChapterSelect extends StatelessWidget {
+  final GlobalState state;
+  const MangaBookChapterSelect({Key? key, required this.state})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text("Selected Book"),
+        backgroundColor: Colors.black,
+      ),
+      backgroundColor: Colors.black,
+      bottomNavigationBar:
+          Consumer<GlobalState>(builder: (context, state, widget) {
+        return BottomBar(state: state);
+      }),
+      body: Stack(
+        children: [
+          Consumer<GlobalState>(builder: (context, state, widget) {
+            return Container();
+          }),
+        ],
+      ),
+    );
   }
 }
 
@@ -136,19 +156,15 @@ class AddMangaBookView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var selectedItem = MangaBook();
+    selectedItem.cover = state.addBookCover;
+    selectedItem.chapterDirs = state.addBookChapters;
     return Container(
       child: Column(
         children: [
           Center(
               child: Container(
-            child: MangaBookItem(item: {
-              "cover": state.addBookCover,
-              "chapters": state.addBookChapters,
-            }, state: state),
-            height: 400,
-            width: 250,
-          )),
-          // ChapterList()
+                  child: MangaBookItem(state: state, item: selectedItem))),
           TextButton(
               child: Text('Add Cover'),
               onPressed: () => {onPressAddCover(state)}),
@@ -298,7 +314,7 @@ class MangaBookView extends StatelessWidget {
 class MangaBookItem extends StatelessWidget {
   const MangaBookItem({Key? key, required this.item, required state})
       : super(key: key);
-  final dynamic item;
+  final MangaBook item;
   @override
   Widget build(BuildContext context) {
     return Consumer<GlobalState>(builder: (context, state, widget) {
@@ -307,7 +323,7 @@ class MangaBookItem extends StatelessWidget {
         child: Container(
           decoration: const BoxDecoration(color: Colors.black),
           child: Image.file(
-            File(item['cover']),
+            File(item.cover),
             fit: BoxFit.cover,
           ),
         ),
@@ -331,7 +347,10 @@ class MangaListView extends StatelessWidget {
               mainAxisSpacing: 0,
               childAspectRatio: 9 / 16),
           children: state.bookList.map((item) {
-            return MangaBookItem(item: item, state: state);
+            return MangaBookItem(
+              state: state,
+              item: item,
+            );
           }).toList(),
         );
       });
@@ -369,7 +388,6 @@ class BottomBar extends StatelessWidget {
               IconButton(
                 onPressed: () async {
                   Get.toNamed('/import');
-                  // bottomBarAddBook(state);
                 },
                 icon: const Icon(Icons.book_outlined, color: Colors.white),
               ),
