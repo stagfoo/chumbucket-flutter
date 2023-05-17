@@ -8,8 +8,6 @@ import 'middleware.dart';
 import 'store.dart';
 
 Future<void> onPressMangaBookItem(GlobalState state, MangaBook item) async {
-  print(state);
-  print(item);
   try {
     state.selectMangaBook(item);
     Get.toNamed('/chapter-select');
