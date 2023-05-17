@@ -80,6 +80,16 @@ void onBubbleTextChange(GlobalState state, String value, Bubble bubble) {
   saveDB(localDBFile, state);
 }
 
+Future<void> onPressAddCover(GlobalState state) async {
+  var choosenFolder = await pickDir();
+  var folder = choosenFolder.toString();
+  state.addMangaBook({
+    "cover": folder + '/cover.jpg',
+    "folder": folder,
+    "chapterDirs": [folder]
+  });
+}
+
 saveDB(String name, GlobalState state) async {
   Map<String, dynamic> tomlTemplate = {'bookList': {}, 'bubbles': {}};
   //TODO convert for loops
