@@ -139,16 +139,25 @@ class AddMangaBookView extends StatelessWidget {
     return Container(
       child: Column(
         children: [
-          // CoverView()
+          Center(
+              child: Container(
+            child: MangaBookItem(item: {
+              "cover": state.addBookCover,
+              "chapters": state.addBookChapters,
+            }, state: state),
+            height: 400,
+            width: 250,
+          )),
           // ChapterList()
           TextButton(
               child: Text('Add Cover'),
               onPressed: () => {onPressAddCover(state)}),
           TextButton(
               child: Text('Add Chapter'),
-              onPressed: () => {
-                    // onPressAddCover(state)
-                  })
+              onPressed: () => {onPressAddFolders(state)}),
+          TextButton(
+              child: Text('Save Book'),
+              onPressed: () => {onPressSaveNewBook(state)})
         ],
       ),
     );
@@ -341,7 +350,7 @@ class BottomBar extends StatelessWidget {
     return Container(
         height: 60,
         //TODO create color palette https://pub.dev/packages/flutter_palette
-        decoration: const BoxDecoration(color: Colors.yellow, boxShadow: [
+        decoration: const BoxDecoration(color: Colors.black, boxShadow: [
           BoxShadow(
             spreadRadius: 1,
             blurRadius: 10,
@@ -355,14 +364,14 @@ class BottomBar extends StatelessWidget {
                 onPressed: () async {
                   Get.toNamed('/home');
                 },
-                icon: const Icon(Icons.home_outlined, color: Colors.black),
+                icon: const Icon(Icons.home_outlined, color: Colors.white),
               ),
               IconButton(
                 onPressed: () async {
                   Get.toNamed('/import');
                   // bottomBarAddBook(state);
                 },
-                icon: const Icon(Icons.book_outlined, color: Colors.black),
+                icon: const Icon(Icons.book_outlined, color: Colors.white),
               ),
               IconButton(
                 isSelected: false,
@@ -372,7 +381,7 @@ class BottomBar extends StatelessWidget {
                   // Get.toNamed('/flash-cards');
                 },
                 icon:
-                    const Icon(Icons.chat_bubble_outline, color: Colors.black),
+                    const Icon(Icons.chat_bubble_outline, color: Colors.white),
               ),
               IconButton(
                 onPressed: () async {
@@ -382,7 +391,7 @@ class BottomBar extends StatelessWidget {
                   loadConfig(state);
                   print(state.bookList);
                 },
-                icon: const Icon(Icons.refresh_outlined, color: Colors.black),
+                icon: const Icon(Icons.settings_outlined, color: Colors.white),
                 tooltip: "reload config",
               )
             ],

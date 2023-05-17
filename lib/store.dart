@@ -28,6 +28,8 @@ class GlobalState extends ChangeNotifier {
   int currentPageNumber = 0;
   List book = [];
   List bookList = [];
+  String addBookCover = '';
+  List<String> addBookChapters = [];
   List<Bubble> bubbleList = [];
   List<Bubble> currentPageBubbles = [];
 
@@ -39,6 +41,22 @@ class GlobalState extends ChangeNotifier {
   void loadMangaBook(files) {
     book = files;
     notifyListeners();
+  }
+
+  void setNewBookCover(file) {
+    addBookCover = file;
+    notifyListeners();
+  }
+
+  void addNewBookChapters(folder) {
+    addBookChapters.add(folder);
+    notifyListeners();
+  }
+
+  void resetAddNewBook() {
+    addBookChapters = [];
+    addBookCover = '';
+    //Don't notify because no rerender is needed?
   }
 
   void setCurrentPageBubbles(bubbles) {

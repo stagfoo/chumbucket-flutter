@@ -81,13 +81,25 @@ void onBubbleTextChange(GlobalState state, String value, Bubble bubble) {
 }
 
 Future<void> onPressAddCover(GlobalState state) async {
+  var chooseFile = await pickFile();
+  state.setNewBookCover(chooseFile.path);
+}
+
+Future<void> onPressAddFolders(GlobalState state) async {
   var choosenFolder = await pickDir();
   var folder = choosenFolder.toString();
+  state.addNewBookChapters(folder);
+}
+
+Future<void> onPressSaveNewBook(GlobalState state) async {
   state.addMangaBook({
-    "cover": folder + '/cover.jpg',
-    "folder": folder,
-    "chapterDirs": [folder]
+    "cover": state.addBookCover,
+    "folder": File(state.addBookCover).parent,
+    "chapterDirs": state.addBookChapters
   });
+  state.resetAddNewBook();
+  saveDB(localDBFile, state);
+  Get.toNamed('/home');
 }
 
 saveDB(String name, GlobalState state) async {

@@ -33,6 +33,16 @@ Future<List> getDirs() async {
   }
 }
 
+Future<File> pickFile() async {
+  try {
+    var root = await FilePicker.platform.pickFiles();
+    var firstFile = root!.files[0].path ?? '';
+    return File(firstFile);
+  } catch (err) {
+    rethrow;
+  }
+}
+
 Future<List> getFiles() async {
   try {
     var root = await FilePicker.platform.getDirectoryPath();
