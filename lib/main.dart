@@ -28,14 +28,14 @@ void main() {
             name: '/tags',
             page: () =>
                 Consumer<GlobalState>(builder: (context, state, widget) {
-                  return MangaBookPage(state: state);
+                  return TagPage(state: state);
                 }),
             transition: Transition.fadeIn),
         GetPage(
             name: '/import',
             page: () =>
                 Consumer<GlobalState>(builder: (context, state, widget) {
-                  return MangaBookPage(state: state);
+                  return AddMangaBookPage(state: state);
                 }),
             transition: Transition.fadeIn),
       ],
