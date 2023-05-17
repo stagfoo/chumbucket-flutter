@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mix/mix.dart';
 import 'package:provider/provider.dart';
 // import 'package:webview_flutter/webview_flutter.dart';
 
@@ -19,6 +20,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text("Your Books"),
         backgroundColor: Colors.black,
       ),
@@ -38,6 +40,32 @@ class HomePage extends StatelessWidget {
   }
 }
 
+class TagPage extends StatelessWidget {
+  final GlobalState state;
+  const TagPage({Key? key, required this.state}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text("Tags"),
+        backgroundColor: Colors.black,
+      ),
+      backgroundColor: Colors.black,
+      body: Stack(children: [
+        AddMangaBookView(state: state),
+        Align(
+          child: Consumer<GlobalState>(builder: (context, state, widget) {
+            return BottomBar(state: state);
+          }),
+          alignment: Alignment.bottomCenter,
+        )
+      ]),
+    );
+  }
+}
+
 //TODO re-write other widgets like this like this
 class MangaBookPage extends StatelessWidget {
   final GlobalState state;
@@ -50,7 +78,7 @@ class MangaBookPage extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.black,
         body: Stack(children: [
-          MangaBookView(state: key),
+          MangaBookView(state: state),
           //check which is better
           BubbleListView(),
           Align(
@@ -65,14 +93,21 @@ class MangaBookPage extends StatelessWidget {
   }
 }
 
-class AddMangaBook extends StatelessWidget {
-  const AddMangaBook({Key? key}) : super(key: key);
+class AddMangaBookPage extends StatelessWidget {
+  final GlobalState state;
+  const AddMangaBookPage({Key? key, required this.state}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text("Add New Book"),
+        backgroundColor: Colors.black,
+      ),
       backgroundColor: Colors.black,
       body: Stack(children: [
+        AddMangaBookView(state: state),
         Align(
           child: Consumer<GlobalState>(builder: (context, state, widget) {
             return BottomBar(state: state);
@@ -86,36 +121,37 @@ class AddMangaBook extends StatelessWidget {
 
 //--------------------------------------------------------------
 
-// class AddMangaView extends StatelessWidget {
-//   const AddMangaView({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Column(children: [
-//         CoverView()
-//         ChapterList()
-//         TextButton(
-//           child: Text('Add Cover'),
-//           onPressed: () => {
-//             onPressAddCover(state)
-//         }),
-//         TextButton(
-//           child: Text('Add Chapter'),
-//           onPressed: () => {
-//             onPressAddCover(state)
-//         })
-//       ],),
-//     );
-//   }
-// }
-
 class ChapterView extends StatelessWidget {
   const ChapterView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container();
+  }
+}
+
+class AddMangaBookView extends StatelessWidget {
+  final GlobalState state;
+  const AddMangaBookView({Key? key, required this.state}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          // CoverView()
+          // ChapterList()
+          TextButton(
+              child: Text('Add Cover'),
+              onPressed: () => {onPressAddCover(state)}),
+          TextButton(
+              child: Text('Add Chapter'),
+              onPressed: () => {
+                    // onPressAddCover(state)
+                  })
+        ],
+      ),
+    );
   }
 }
 
@@ -128,9 +164,7 @@ class BubbleItem extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController textFieldController =
         TextEditingController(text: item.text);
-    // Sets the text to the bubble text
-    // kind of like managed inputs in react
-    // onBubbleTextChange(state, textFieldController.text, item);
+
     return Consumer<GlobalState>(builder: (context, state, widget) {
       return Positioned(
         top: item.y,
@@ -325,13 +359,15 @@ class BottomBar extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () async {
-                  bottomBarAddBook(state);
+                  Get.toNamed('/import');
+                  // bottomBarAddBook(state);
                 },
                 icon: const Icon(Icons.book_outlined, color: Colors.black),
               ),
               IconButton(
                 isSelected: false,
                 onPressed: () async {
+                  // Get.toNamed('/tags');
                   Get.toNamed('/tags');
                   // Get.toNamed('/flash-cards');
                 },
