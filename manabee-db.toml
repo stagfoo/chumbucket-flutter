@@ -1,4 +1,24 @@
-[bookList]
+[bookList.kuVPshETPLa2d5MT9k3Ezw]
+cover = '/mnt/SLOW_STORAGE/manga/nichijou/cover.jpg'
+folder = '/mnt/SLOW_STORAGE/manga/nichijou'
+chapterDirs = ['/mnt/SLOW_STORAGE/manga/nichijou/01']
+
+[bookList.8j7QQEUdjj3L8WUex2aY5f]
+cover = '/mnt/SLOW_STORAGE/manga/blue-period/cover.jpg'
+folder = '/mnt/SLOW_STORAGE/manga/blue-period'
+chapterDirs = ['/mnt/SLOW_STORAGE/manga/blue-period/01']
+
+[bookList.4EaYyNa2wBZpwFdkafTsg2]
+cover = '/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第01巻/Shinchan 1_001.jpg'
+folder = '/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第01巻'
+chapterDirs = ['/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第01巻', '/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第02巻']
+
+[bubbles.5rPTvyDCbMEhc7dnjGo1pZ]
+x = 201.31707763671875
+y = 402.2522888183594
+filename = '/mnt/SLOW_STORAGE/manga/Uzaki-Chan/Uzaki Chan wa Asobitai  v01/00007.jpg'
+id = '5rPTvyDCbMEhc7dnjGo1pZ'
+text = 'hello'
 
 [bubbles.bAZ8pNQSh6RoaXVUvRWvwz]
 x = 0.0
@@ -7,79 +27,37 @@ filename = '/mnt/SLOW_STORAGE/manga/nichijou/01/CMCZIP.CO-005.jpg'
 id = 'bAZ8pNQSh6RoaXVUvRWvwz'
 text = ''
 
-[bubbles.dxKpFfuUbbMv6y5Xx6dmLL]
+[bubbles.tBeCKTgkwQqT4aHabKvMCU]
 x = 0.0
 y = 0.0
-filename = '/mnt/SLOW_STORAGE/manga/nichijou/01/CMCZIP.CO-005.jpg'
-id = 'dxKpFfuUbbMv6y5Xx6dmLL'
+filename = '/mnt/SLOW_STORAGE/manga/blue-period/01/00003.jpg'
+id = 'tBeCKTgkwQqT4aHabKvMCU'
 text = ''
 
-[bubbles.eQecHEHG6WkNvUP1s68EFG]
+[bubbles.8VyvDV1Qa4tvqYBaHF4Dck]
 x = 0.0
 y = 0.0
-filename = '/mnt/SLOW_STORAGE/manga/nichijou/01/CMCZIP.CO-005.jpg'
-id = 'eQecHEHG6WkNvUP1s68EFG'
+filename = '/mnt/SLOW_STORAGE/manga/blue-period/01/00003.jpg'
+id = '8VyvDV1Qa4tvqYBaHF4Dck'
 text = ''
 
-[bubbles.ecYGYXT5dZVkarTyEu7R3u]
+[bubbles.dKFSQ3uThe6KbmTDB48ZHP]
 x = 0.0
 y = 0.0
-filename = '/mnt/SLOW_STORAGE/manga/nichijou/01/CMCZIP.CO-005.jpg'
-id = 'ecYGYXT5dZVkarTyEu7R3u'
+filename = '/mnt/SLOW_STORAGE/manga/blue-period/01/00003.jpg'
+id = 'dKFSQ3uThe6KbmTDB48ZHP'
 text = ''
 
-[bubbles.u9YTswzHcG4vd2NMP54TBp]
+[bubbles.73Aq4E3BVk5g9BpwohmYuP]
 x = 0.0
 y = 0.0
-filename = '/mnt/SLOW_STORAGE/manga/nichijou/01/CMCZIP.CO-005.jpg'
-id = 'u9YTswzHcG4vd2NMP54TBp'
+filename = '/mnt/SLOW_STORAGE/manga/blue-period/01/00003.jpg'
+id = '73Aq4E3BVk5g9BpwohmYuP'
 text = ''
 
-[bubbles.eVrizeBaxZMdVR3wUNDkCD]
-x = 0.0
-y = 0.0
-filename = '/mnt/SLOW_STORAGE/manga/nichijou/01/CMCZIP.CO-005.jpg'
-id = 'eVrizeBaxZMdVR3wUNDkCD'
-text = ''
-
-[bubbles.qfQ8NG2b4tGVrrqyLTk6rt]
-x = 0.0
-y = 0.0
-filename = '/mnt/SLOW_STORAGE/manga/nichijou/01/CMCZIP.CO-005.jpg'
-id = 'qfQ8NG2b4tGVrrqyLTk6rt'
-text = ''
-
-[bubbles.vxMPk9UQQqZK5Pv9XXKMRv]
-x = 250.52587890625
-y = 672.4985961914062
-filename = '/mnt/SLOW_STORAGE/manga/osama-ranking/01/DLRAW.NET-003.jpg'
-id = 'vxMPk9UQQqZK5Pv9XXKMRv'
-text = ''
-
-[bubbles.oxByK3EntdLhpDpKkuB9iK]
-x = 0.0
-y = 0.0
-filename = '/mnt/SLOW_STORAGE/manga/osama-ranking/01/DLRAW.NET-003.jpg'
-id = 'oxByK3EntdLhpDpKkuB9iK'
-text = ''
-
-[bubbles.fmXDX4rEQzRkEyKCy12bJB]
-x = 85.240234375
-y = 402.7447509765625
-filename = '/mnt/SLOW_STORAGE/manga/osama-ranking/01/DLRAW.NET-003.jpg'
-id = 'fmXDX4rEQzRkEyKCy12bJB'
-text = 'hello'
-
-[bubbles.wFCbbcBWSK7UMR5DWmkfwu]
-x = 265.260498046875
-y = 262.9483642578125
-filename = '/mnt/SLOW_STORAGE/manga/osama-ranking/01/DLRAW.NET-003.jpg'
-id = 'wFCbbcBWSK7UMR5DWmkfwu'
-text = 'hello'
-
-[bubbles.jVqLUUaCCZZn3x3Ffi9pYC]
-x = 45.161376953125
-y = 221.34072875976562
-filename = '/mnt/SLOW_STORAGE/manga/osama-ranking/01/DLRAW.NET-003.jpg'
-id = 'jVqLUUaCCZZn3x3Ffi9pYC'
-text = 'hi'
+[bubbles.bCZ7Su4iwRParhcG5VT8qU]
+x = 156.1534423828125
+y = 330.4266357421875
+filename = '/mnt/SLOW_STORAGE/manga/blue-period/01/00003.jpg'
+id = 'bCZ7Su4iwRParhcG5VT8qU'
+text = 'first bubble'

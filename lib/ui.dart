@@ -142,7 +142,14 @@ class MangaBookChapterSelect extends StatelessWidget {
       body: Stack(
         children: [
           Consumer<GlobalState>(builder: (context, state, widget) {
-            return Container();
+            return Column(
+              children: state.selectedBook.chapterDirs.map((item) {
+                return TextButton(
+                    //TODO add chapter
+                    onPressed: () => {onPressSelectChapter(state, item)},
+                    child: Text(item));
+              }).toList(),
+            );
           }),
         ],
       ),
@@ -355,7 +362,6 @@ class MangaListView extends StatelessWidget {
         );
       });
     } catch (err) {
-      print(err);
       return Container();
     }
   }

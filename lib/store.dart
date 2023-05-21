@@ -8,31 +8,42 @@ import 'package:short_uuids/short_uuids.dart';
 
 var localDBFile = 'manabee-db.toml';
 
+class Word {
+  String id = const ShortUuid().generate();
+  String eng = '';
+  String furagana = '';
+  String kanji = '';
+  String meaning = '';
+}
+
 class Bubble {
   double x = 0;
   double y = 0;
   File filename = File('');
   String id = const ShortUuid().generate();
   String text = '';
+  List<Word> words = [];
 }
 
 class MangaBook {
   String cover = '';
   List<String> chapterDirs = [];
   List<Bubble> bubbles = [];
-  int lastChapterRead = 0;
-  int lastPageRead = 0;
+  String lastChapterRead = '';
+  String lastPageRead = '';
 }
 
 class GlobalState extends ChangeNotifier {
   int currentPageNumber = 0;
-  List book = [];
+  //TODO rename book to currentBookFiles or something
+  List<dynamic> book = [];
   MangaBook selectedBook = MangaBook();
   List<MangaBook> bookList = [];
   String addBookCover = '';
   List<String> addBookChapters = [];
   List<Bubble> bubbleList = [];
   List<Bubble> currentPageBubbles = [];
+  int selectedChapter = 0;
 
   void loadDefaultState(bookList, bubbleList) {
     bookList = bookList;
@@ -46,6 +57,11 @@ class GlobalState extends ChangeNotifier {
 
   void selectMangaBook(MangaBook book) {
     selectedBook = book;
+    notifyListeners();
+  }
+
+  void setSelectedChapter(int i) {
+    selectedChapter = i;
     notifyListeners();
   }
 

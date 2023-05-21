@@ -56,21 +56,24 @@ Future<List> getFiles() async {
     }
     return list;
   } catch (err) {
+    print(err);
     print("Get Files failed or canceled");
     rethrow;
   }
 }
 
-Future<List> getFilesFromFolder(String root) async {
+Future<List<dynamic>> getFilesFromFolder(String root) async {
   try {
     var list = [];
-    List contents = Directory(root).listSync();
+    List<FileSystemEntity> contents = Directory(root).listSync();
     for (var fileOrDir in contents) {
+      print(fileOrDir);
       if (fileOrDir is File) {
         //TODO filter by extension
         list.add(fileOrDir);
       }
     }
+    //TODO can i do this without casting?
     return list;
   } catch (err) {
     print("Get Files from folder failed or canceled");

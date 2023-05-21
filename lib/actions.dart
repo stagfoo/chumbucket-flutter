@@ -8,19 +8,26 @@ import 'middleware.dart';
 import 'store.dart';
 
 Future<void> onPressMangaBookItem(GlobalState state, MangaBook item) async {
+  state.selectMangaBook(item);
+  Get.toNamed('/chapter-select');
+}
+
+Future<void> onPressSelectChapter(GlobalState state, String path) async {
   try {
-    state.selectMangaBook(item);
-    Get.toNamed('/chapter-select');
-    // var chapterFileDir = item['chapterDirs'][0];
-    // var files = await getFilesFromFolder(chapterFileDir);
-    // if (files == []) {
-    //   Get.toNamed('/home');
-    // } else {
-    //   state.loadMangaBook(files);
-    //   state.resetPage();
-    //   reloadBubbleList(state);
-    //   Get.toNamed('/reading');
-    // }
+    var chapter = state.selectedBook.chapterDirs.indexOf(path);
+    print(path);
+    print(chapter);
+    state.setSelectedChapter(chapter);
+    var files =
+        await getFilesFromFolder(state.selectedBook.chapterDirs[chapter]);
+    if (files == []) {
+      Get.toNamed('/home');
+    } else {
+      state.loadMangaBook(files);
+      state.resetPage();
+      reloadBubbleList(state);
+      Get.toNamed('/reading');
+    }
   } catch (err) {
     print("unable to load chapterDirs");
     print(err);
@@ -49,6 +56,7 @@ Future<void> onPressPrevPage(GlobalState state) async {
 
 void onTapCreateBubble(GlobalState state, Offset eventDetails) {
   var nextBubble = Bubble();
+  //Is this correct?
   nextBubble.filename = state.book[state.currentPageNumber];
   nextBubble.x = eventDetails.dx;
   nextBubble.y = eventDetails.dy;
