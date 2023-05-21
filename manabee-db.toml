@@ -1,14 +1,14 @@
-[bookList.kuVPshETPLa2d5MT9k3Ezw]
+[bookList.tP7cFdLtsPd2du3tcpF8E1]
 cover = '/mnt/SLOW_STORAGE/manga/nichijou/cover.jpg'
 folder = '/mnt/SLOW_STORAGE/manga/nichijou'
 chapterDirs = ['/mnt/SLOW_STORAGE/manga/nichijou/01']
 
-[bookList.8j7QQEUdjj3L8WUex2aY5f]
+[bookList.qnkf1WzHEzAyJSVGBhMeg8]
 cover = '/mnt/SLOW_STORAGE/manga/blue-period/cover.jpg'
 folder = '/mnt/SLOW_STORAGE/manga/blue-period'
 chapterDirs = ['/mnt/SLOW_STORAGE/manga/blue-period/01']
 
-[bookList.4EaYyNa2wBZpwFdkafTsg2]
+[bookList.dtEocdWkUuTKCsihYGsqQw]
 cover = '/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第01巻/Shinchan 1_001.jpg'
 folder = '/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第01巻'
 chapterDirs = ['/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第01巻', '/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第02巻']
@@ -61,3 +61,10 @@ y = 330.4266357421875
 filename = '/mnt/SLOW_STORAGE/manga/blue-period/01/00003.jpg'
 id = 'bCZ7Su4iwRParhcG5VT8qU'
 text = 'first bubble'
+
+[bubbles.5xdkWtyBkv23dWVJTwYvet]
+x = 100.0
+y = 100.0
+filename = '/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第01巻/Shinchan 1_004.jpg'
+id = '5xdkWtyBkv23dWVJTwYvet'
+text = 'hello'

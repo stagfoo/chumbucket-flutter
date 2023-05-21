@@ -76,6 +76,10 @@ class MangaBookPage extends StatelessWidget {
     // var wvc = WebViewController();
     // wvc.loadRequest(Uri.parse('https://jisho.org/'));
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => {onPressCreateBubble(state)},
+          child: Icon(Icons.chat_bubble),
+        ),
         backgroundColor: Colors.black,
         body: Stack(children: [
           MangaBookView(state: state),

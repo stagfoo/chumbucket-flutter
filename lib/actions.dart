@@ -54,6 +54,18 @@ Future<void> onPressPrevPage(GlobalState state) async {
   reloadBubbleList(state);
 }
 
+void onPressCreateBubble(GlobalState state) {
+  var nextBubble = Bubble();
+  //Is this correct?
+  nextBubble.filename = state.book[state.currentPageNumber];
+  nextBubble.x = 100;
+  nextBubble.y = 100;
+  nextBubble.text = '';
+  state.addBubble(nextBubble);
+  reloadBubbleList(state);
+  saveDB(localDBFile, state);
+}
+
 void onTapCreateBubble(GlobalState state, Offset eventDetails) {
   var nextBubble = Bubble();
   //Is this correct?
