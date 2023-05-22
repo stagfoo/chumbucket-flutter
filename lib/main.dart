@@ -13,38 +13,21 @@ void main() {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       enableLog: true,
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
+      theme: ThemeData.light(),
       getPages: [
         GetPage(
             name: '/',
-            page: () => const HomePage(),
-            transition: Transition.fadeIn),
-        GetPage(
-            name: '/chapter-select',
-            page: () =>
+             page: () =>
                 Consumer<GlobalState>(builder: (context, state, widget) {
-                  return MangaBookChapterSelect(state: state);
+                  return HomePage(state: state);
                 }),
             transition: Transition.fadeIn),
         GetPage(
-            name: '/reading',
+            name: '/other-page',
             page: () =>
                 Consumer<GlobalState>(builder: (context, state, widget) {
-                  return MangaBookPage(state: state);
-                }),
-            transition: Transition.fadeIn),
-        GetPage(
-            name: '/tags',
-            page: () =>
-                Consumer<GlobalState>(builder: (context, state, widget) {
-                  return TagPage(state: state);
-                }),
-            transition: Transition.fadeIn),
-        GetPage(
-            name: '/import',
-            page: () =>
-                Consumer<GlobalState>(builder: (context, state, widget) {
-                  return AddMangaBookPage(state: state);
+                  return OtherPage(state: state);
                 }),
             transition: Transition.fadeIn),
       ],

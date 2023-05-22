@@ -6,118 +6,24 @@ import 'package:get/get.dart';
 import 'package:slugid/slugid.dart';
 import 'package:short_uuids/short_uuids.dart';
 
-var localDBFile = 'manabee-db.toml';
+var localDBFile = 'database.toml';
 
-class Word {
-  String id = const ShortUuid().generate();
-  String eng = '';
-  String furagana = '';
-  String kanji = '';
-  String meaning = '';
-}
-
-class Bubble {
-  double x = 0;
-  double y = 0;
-  File filename = File('');
-  String id = const ShortUuid().generate();
-  String text = '';
-  List<Word> words = [];
-}
-
-class MangaBook {
-  String cover = '';
-  List<String> chapterDirs = [];
-  List<Bubble> bubbles = [];
-  String lastChapterRead = '';
-  String lastPageRead = '';
-}
 
 class GlobalState extends ChangeNotifier {
-  int currentPageNumber = 0;
-  //TODO rename book to currentBookFiles or something
-  List<dynamic> book = [];
-  MangaBook selectedBook = MangaBook();
-  List<MangaBook> bookList = [];
-  String addBookCover = '';
-  List<String> addBookChapters = [];
-  List<Bubble> bubbleList = [];
-  List<Bubble> currentPageBubbles = [];
-  int selectedChapter = 0;
+  int currentNavbarIndex = 0;
+  List<String> bucket = [];
 
-  void loadDefaultState(bookList, bubbleList) {
-    bookList = bookList;
-    bubbleList = bubbleList;
+  void addMeatToBucket(String emojiText) {
+    bucket.add(emojiText);
+    notifyListeners();
   }
-
-  void loadMangaBook(files) {
-    book = files;
+  void setBucket(List<String> value) {
+    bucket = value;
     notifyListeners();
   }
 
-  void selectMangaBook(MangaBook book) {
-    selectedBook = book;
-    notifyListeners();
-  }
-
-  void setSelectedChapter(int i) {
-    selectedChapter = i;
-    notifyListeners();
-  }
-
-  void setNewBookCover(file) {
-    addBookCover = file;
-    notifyListeners();
-  }
-
-  void addNewBookChapters(folder) {
-    addBookChapters.add(folder);
-    notifyListeners();
-  }
-
-  void resetAddNewBook() {
-    addBookChapters = [];
-    addBookCover = '';
-    //Don't notify because no rerender is needed?
-  }
-
-  void setCurrentPageBubbles(bubbles) {
-    currentPageBubbles = bubbles;
-    notifyListeners();
-  }
-
-  void setBubbleList(List<Bubble> bubbles) {
-    bubbleList = bubbles;
-    notifyListeners();
-  }
-
-  void setBookList(List<MangaBook> list) {
-    bookList = list;
-    notifyListeners();
-  }
-
-  void addMangaBook(MangaBook book) {
-    bookList.add(book);
-    notifyListeners();
-  }
-
-  void addBubble(bubble) {
-    bubbleList.add(bubble);
-    notifyListeners();
-  }
-
-  void resetPage() {
-    currentPageNumber = 0;
-    notifyListeners();
-  }
-
-  void nextPage() {
-    currentPageNumber++;
-    notifyListeners();
-  }
-
-  void prevPage() {
-    currentPageNumber--;
+  void saveNavbarIndex(int value) {
+    currentNavbarIndex = value;
     notifyListeners();
   }
 }
