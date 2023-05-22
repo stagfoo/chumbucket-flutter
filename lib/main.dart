@@ -16,7 +16,16 @@ void main() {
       themeMode: ThemeMode.dark,
       getPages: [
         GetPage(
-            name: '/', page: () => HomePage(), transition: Transition.fadeIn),
+            name: '/',
+            page: () => const HomePage(),
+            transition: Transition.fadeIn),
+        GetPage(
+            name: '/chapter-select',
+            page: () =>
+                Consumer<GlobalState>(builder: (context, state, widget) {
+                  return MangaBookChapterSelect(state: state);
+                }),
+            transition: Transition.fadeIn),
         GetPage(
             name: '/reading',
             page: () =>

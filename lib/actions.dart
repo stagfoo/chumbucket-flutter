@@ -7,10 +7,19 @@ import 'package:toml/toml.dart';
 import 'middleware.dart';
 import 'store.dart';
 
-Future<void> onPressMangaBookItem(GlobalState state, dynamic item) async {
+Future<void> onPressMangaBookItem(GlobalState state, MangaBook item) async {
+  state.selectMangaBook(item);
+  Get.toNamed('/chapter-select');
+}
+
+Future<void> onPressSelectChapter(GlobalState state, String path) async {
   try {
-    var chapterFileDir = item['chapterDirs'][0];
-    var files = await getFilesFromFolder(chapterFileDir);
+    var chapter = state.selectedBook.chapterDirs.indexOf(path);
+    print(path);
+    print(chapter);
+    state.setSelectedChapter(chapter);
+    var files =
+        await getFilesFromFolder(state.selectedBook.chapterDirs[chapter]);
     if (files == []) {
       Get.toNamed('/home');
     } else {
@@ -21,6 +30,7 @@ Future<void> onPressMangaBookItem(GlobalState state, dynamic item) async {
     }
   } catch (err) {
     print("unable to load chapterDirs");
+    print(err);
     Get.toNamed('/home');
   }
 }
@@ -44,8 +54,21 @@ Future<void> onPressPrevPage(GlobalState state) async {
   reloadBubbleList(state);
 }
 
+void onPressCreateBubble(GlobalState state) {
+  var nextBubble = Bubble();
+  //Is this correct?
+  nextBubble.filename = state.book[state.currentPageNumber];
+  nextBubble.x = 100;
+  nextBubble.y = 100;
+  nextBubble.text = '';
+  state.addBubble(nextBubble);
+  reloadBubbleList(state);
+  saveDB(localDBFile, state);
+}
+
 void onTapCreateBubble(GlobalState state, Offset eventDetails) {
   var nextBubble = Bubble();
+  //Is this correct?
   nextBubble.filename = state.book[state.currentPageNumber];
   nextBubble.x = eventDetails.dx;
   nextBubble.y = eventDetails.dy;
@@ -81,13 +104,24 @@ void onBubbleTextChange(GlobalState state, String value, Bubble bubble) {
 }
 
 Future<void> onPressAddCover(GlobalState state) async {
+  var chooseFile = await pickFile();
+  state.setNewBookCover(chooseFile.path.toString());
+}
+
+Future<void> onPressAddFolders(GlobalState state) async {
   var choosenFolder = await pickDir();
   var folder = choosenFolder.toString();
-  state.addMangaBook({
-    "cover": folder + '/cover.jpg',
-    "folder": folder,
-    "chapterDirs": [folder]
-  });
+  state.addNewBookChapters(folder);
+}
+
+Future<void> onPressSaveNewBook(GlobalState state) async {
+  var newBook = MangaBook();
+  newBook.cover = state.addBookCover;
+  newBook.chapterDirs = state.addBookChapters;
+  state.addMangaBook(newBook);
+  state.resetAddNewBook();
+  Get.toNamed('/home');
+  saveDB(localDBFile, state);
 }
 
 saveDB(String name, GlobalState state) async {
@@ -95,9 +129,9 @@ saveDB(String name, GlobalState state) async {
   //TODO convert for loops
   state.bookList.forEach((item) {
     tomlTemplate['bookList'][const ShortUuid().generate().toString()] = {
-      'cover': item['folder'] + '/cover.jpg',
-      'folder': item['folder'],
-      'chapterDirs': item['chapterDirs'],
+      'cover': item.cover,
+      'folder': File(item.cover).parent.path.toString(),
+      'chapterDirs': item.chapterDirs,
     };
   });
   state.bubbleList.forEach((item) {
@@ -125,7 +159,7 @@ void loadConfig(GlobalState state) async {
   if (await File(localDBFile).exists()) {
     var fromDBState = await loadDB(localDBFile);
     List<Bubble> nextBubbles = [];
-    var nextBookList = [];
+    List<MangaBook> nextBookList = [];
     Map.from(fromDBState['bubbles']).forEach((key, value) {
       var newBubble = Bubble();
       newBubble.filename = File(value['filename']);
@@ -135,32 +169,19 @@ void loadConfig(GlobalState state) async {
       newBubble.id = key;
       nextBubbles.add(newBubble);
     });
-    Map.from(fromDBState['bookList']).forEach((key, value) {
-      nextBookList.add(value);
-    });
-    state.setBubbleList(nextBubbles);
-    state.setBookList(nextBookList);
+    try {
+      Map.from(fromDBState['bookList']).forEach((key, value) {
+        var book = MangaBook();
+        book.cover = value['cover'];
+        book.chapterDirs = List<String>.from(value['chapterDirs'] as List);
+        nextBookList.add(book);
+      });
+      state.setBubbleList(nextBubbles);
+      state.setBookList(nextBookList);
+    } catch (err) {
+      print(err);
+    }
   } else {
     File(localDBFile).writeAsString('');
-  }
-}
-
-void bottomBarAddBook(GlobalState state) async {
-  try {
-    var files = await getFiles();
-    state.loadMangaBook(files);
-    state.resetPage();
-    Get.toNamed('/reading');
-    var firstImage = files[0] as File;
-    var folder = firstImage.parent.parent.path.toString();
-    state.addMangaBook({
-      "cover": folder,
-      "folder": folder,
-      "chapterDirs": [folder]
-    });
-    saveDB(localDBFile, state);
-  } catch (err) {
-    print("File open canceled");
-    Get.toNamed('/home');
   }
 }

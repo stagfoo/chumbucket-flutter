@@ -1,5 +1,6 @@
 # chapter view
 
-- [] show a list of chapters
-- [] open mangabookview for that chapter
-- [] 
+- [x] show a list of chapters
+- [x] open mangabookview for that chapter
+- [] Show latest viewed page
+- [] jump to last viewed page

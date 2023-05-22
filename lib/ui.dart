@@ -76,6 +76,10 @@ class MangaBookPage extends StatelessWidget {
     // var wvc = WebViewController();
     // wvc.loadRequest(Uri.parse('https://jisho.org/'));
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => {onPressCreateBubble(state)},
+          child: Icon(Icons.chat_bubble),
+        ),
         backgroundColor: Colors.black,
         body: Stack(children: [
           MangaBookView(state: state),
@@ -121,12 +125,39 @@ class AddMangaBookPage extends StatelessWidget {
 
 //--------------------------------------------------------------
 
-class ChapterView extends StatelessWidget {
-  const ChapterView({Key? key}) : super(key: key);
+class MangaBookChapterSelect extends StatelessWidget {
+  final GlobalState state;
+  const MangaBookChapterSelect({Key? key, required this.state})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text("Selected Book"),
+        backgroundColor: Colors.black,
+      ),
+      backgroundColor: Colors.black,
+      bottomNavigationBar:
+          Consumer<GlobalState>(builder: (context, state, widget) {
+        return BottomBar(state: state);
+      }),
+      body: Stack(
+        children: [
+          Consumer<GlobalState>(builder: (context, state, widget) {
+            return Column(
+              children: state.selectedBook.chapterDirs.map((item) {
+                return TextButton(
+                    //TODO add chapter
+                    onPressed: () => {onPressSelectChapter(state, item)},
+                    child: Text(item));
+              }).toList(),
+            );
+          }),
+        ],
+      ),
+    );
   }
 }
 
@@ -136,19 +167,24 @@ class AddMangaBookView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var selectedItem = MangaBook();
+    selectedItem.cover = state.addBookCover;
+    selectedItem.chapterDirs = state.addBookChapters;
     return Container(
       child: Column(
         children: [
-          // CoverView()
-          // ChapterList()
+          Center(
+              child: Container(
+                  child: MangaBookItem(state: state, item: selectedItem))),
           TextButton(
               child: Text('Add Cover'),
               onPressed: () => {onPressAddCover(state)}),
           TextButton(
               child: Text('Add Chapter'),
-              onPressed: () => {
-                    // onPressAddCover(state)
-                  })
+              onPressed: () => {onPressAddFolders(state)}),
+          TextButton(
+              child: Text('Save Book'),
+              onPressed: () => {onPressSaveNewBook(state)})
         ],
       ),
     );
@@ -289,7 +325,7 @@ class MangaBookView extends StatelessWidget {
 class MangaBookItem extends StatelessWidget {
   const MangaBookItem({Key? key, required this.item, required state})
       : super(key: key);
-  final dynamic item;
+  final MangaBook item;
   @override
   Widget build(BuildContext context) {
     return Consumer<GlobalState>(builder: (context, state, widget) {
@@ -298,7 +334,7 @@ class MangaBookItem extends StatelessWidget {
         child: Container(
           decoration: const BoxDecoration(color: Colors.black),
           child: Image.file(
-            File(item['cover']),
+            File(item.cover),
             fit: BoxFit.cover,
           ),
         ),
@@ -322,12 +358,14 @@ class MangaListView extends StatelessWidget {
               mainAxisSpacing: 0,
               childAspectRatio: 9 / 16),
           children: state.bookList.map((item) {
-            return MangaBookItem(item: item, state: state);
+            return MangaBookItem(
+              state: state,
+              item: item,
+            );
           }).toList(),
         );
       });
     } catch (err) {
-      print(err);
       return Container();
     }
   }
@@ -341,7 +379,7 @@ class BottomBar extends StatelessWidget {
     return Container(
         height: 60,
         //TODO create color palette https://pub.dev/packages/flutter_palette
-        decoration: const BoxDecoration(color: Colors.yellow, boxShadow: [
+        decoration: const BoxDecoration(color: Colors.black, boxShadow: [
           BoxShadow(
             spreadRadius: 1,
             blurRadius: 10,
@@ -355,14 +393,13 @@ class BottomBar extends StatelessWidget {
                 onPressed: () async {
                   Get.toNamed('/home');
                 },
-                icon: const Icon(Icons.home_outlined, color: Colors.black),
+                icon: const Icon(Icons.home_outlined, color: Colors.white),
               ),
               IconButton(
                 onPressed: () async {
                   Get.toNamed('/import');
-                  // bottomBarAddBook(state);
                 },
-                icon: const Icon(Icons.book_outlined, color: Colors.black),
+                icon: const Icon(Icons.book_outlined, color: Colors.white),
               ),
               IconButton(
                 isSelected: false,
@@ -372,7 +409,7 @@ class BottomBar extends StatelessWidget {
                   // Get.toNamed('/flash-cards');
                 },
                 icon:
-                    const Icon(Icons.chat_bubble_outline, color: Colors.black),
+                    const Icon(Icons.chat_bubble_outline, color: Colors.white),
               ),
               IconButton(
                 onPressed: () async {
@@ -382,7 +419,7 @@ class BottomBar extends StatelessWidget {
                   loadConfig(state);
                   print(state.bookList);
                 },
-                icon: const Icon(Icons.refresh_outlined, color: Colors.black),
+                icon: const Icon(Icons.settings_outlined, color: Colors.white),
                 tooltip: "reload config",
               )
             ],

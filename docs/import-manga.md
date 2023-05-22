@@ -1,6 +1,8 @@
 # Import Manga Feature
 
-- [] add a page 
-- [] cover selector (file picker)
-- [] chapter selector (folder picker)
-- [] add a save manga button
+- [x] add a page 
+- [x] cover selector (file picker)
+- [x] chapter selector (folder picker)
+- [x] add a save manga button
+- [] show chapters already added
+- [] show toast to import all folders as chapters 
