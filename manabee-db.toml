@@ -1,24 +1,37 @@
-[bookList.tP7cFdLtsPd2du3tcpF8E1]
+[bookList.3q2irBq8a59xktjUEt3tVA]
 cover = '/mnt/SLOW_STORAGE/manga/nichijou/cover.jpg'
 folder = '/mnt/SLOW_STORAGE/manga/nichijou'
 chapterDirs = ['/mnt/SLOW_STORAGE/manga/nichijou/01']
 
-[bookList.qnkf1WzHEzAyJSVGBhMeg8]
+[bookList.vNytqNTZTxjkZfvJg156F7]
 cover = '/mnt/SLOW_STORAGE/manga/blue-period/cover.jpg'
 folder = '/mnt/SLOW_STORAGE/manga/blue-period'
 chapterDirs = ['/mnt/SLOW_STORAGE/manga/blue-period/01']
 
-[bookList.dtEocdWkUuTKCsihYGsqQw]
+[bookList.koM8ggiGNZvbeYMZsGJ9NY]
 cover = '/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第01巻/Shinchan 1_001.jpg'
 folder = '/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第01巻'
 chapterDirs = ['/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第01巻', '/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第02巻']
 
-[bubbles.5rPTvyDCbMEhc7dnjGo1pZ]
-x = 201.31707763671875
-y = 402.2522888183594
-filename = '/mnt/SLOW_STORAGE/manga/Uzaki-Chan/Uzaki Chan wa Asobitai  v01/00007.jpg'
-id = '5rPTvyDCbMEhc7dnjGo1pZ'
-text = 'hello'
+[bookList.47drr72z12n86TNLpogFoJ]
+cover = '/mnt/SLOW_STORAGE/manga/Uzaki-Chan/Uzaki Chan wa Asobitai  v01/00001.jpg'
+folder = '/mnt/SLOW_STORAGE/manga/Uzaki-Chan/Uzaki Chan wa Asobitai  v01'
+chapterDirs = ['/mnt/SLOW_STORAGE/manga/Uzaki-Chan/Uzaki Chan wa Asobitai  v01', '/mnt/SLOW_STORAGE/manga/Uzaki-Chan/Uzaki Chan wa Asobitai v02', '/mnt/SLOW_STORAGE/manga/Uzaki-Chan/Uzaki Chan wa Asobitai v03']
+
+[bookList.rgX3EmiNf9hP32raa8pEF8]
+cover = '/mnt/SLOW_STORAGE/manga/dragon-quest/Dai no Daibouken v01/[三条陸×芝田優作] ドラゴンクエスト ダイの大冒険 勇者アバンと獄炎の魔王 第01巻/01659.jpg'
+folder = '/mnt/SLOW_STORAGE/manga/dragon-quest/Dai no Daibouken v01/[三条陸×芝田優作] ドラゴンクエスト ダイの大冒険 勇者アバンと獄炎の魔王 第01巻'
+chapterDirs = ['/mnt/SLOW_STORAGE/manga/dragon-quest/Dai no Daibouken v01/[三条陸×芝田優作] ドラゴンクエスト ダイの大冒険 勇者アバンと獄炎の魔王 第01巻']
+
+[bookList.194qUxrrisAMaqrr4bEJ2q]
+cover = '/mnt/SLOW_STORAGE/manga/Kanojo Okarishimasu v28/1.jpg'
+folder = '/mnt/SLOW_STORAGE/manga/Kanojo Okarishimasu v28'
+chapterDirs = ['/mnt/SLOW_STORAGE/manga/Kanojo Okarishimasu v28']
+
+[bookList.vRDNs1uP2FGRuY3dxXMYhN]
+cover = '/mnt/SLOW_STORAGE/manga/with-the-knowledge-of-my-previous-life/01/001.jpg'
+folder = '/mnt/SLOW_STORAGE/manga/with-the-knowledge-of-my-previous-life/01'
+chapterDirs = ['/mnt/SLOW_STORAGE/manga/with-the-knowledge-of-my-previous-life/01', '/mnt/SLOW_STORAGE/manga/with-the-knowledge-of-my-previous-life/02', '/mnt/SLOW_STORAGE/manga/with-the-knowledge-of-my-previous-life/03']
 
 [bubbles.bAZ8pNQSh6RoaXVUvRWvwz]
 x = 0.0
@@ -27,44 +40,44 @@ filename = '/mnt/SLOW_STORAGE/manga/nichijou/01/CMCZIP.CO-005.jpg'
 id = 'bAZ8pNQSh6RoaXVUvRWvwz'
 text = ''
 
-[bubbles.tBeCKTgkwQqT4aHabKvMCU]
-x = 0.0
-y = 0.0
-filename = '/mnt/SLOW_STORAGE/manga/blue-period/01/00003.jpg'
-id = 'tBeCKTgkwQqT4aHabKvMCU'
-text = ''
-
-[bubbles.8VyvDV1Qa4tvqYBaHF4Dck]
-x = 0.0
-y = 0.0
-filename = '/mnt/SLOW_STORAGE/manga/blue-period/01/00003.jpg'
-id = '8VyvDV1Qa4tvqYBaHF4Dck'
-text = ''
-
-[bubbles.dKFSQ3uThe6KbmTDB48ZHP]
-x = 0.0
-y = 0.0
-filename = '/mnt/SLOW_STORAGE/manga/blue-period/01/00003.jpg'
-id = 'dKFSQ3uThe6KbmTDB48ZHP'
-text = ''
-
-[bubbles.73Aq4E3BVk5g9BpwohmYuP]
-x = 0.0
-y = 0.0
-filename = '/mnt/SLOW_STORAGE/manga/blue-period/01/00003.jpg'
-id = '73Aq4E3BVk5g9BpwohmYuP'
-text = ''
-
-[bubbles.bCZ7Su4iwRParhcG5VT8qU]
-x = 156.1534423828125
-y = 330.4266357421875
-filename = '/mnt/SLOW_STORAGE/manga/blue-period/01/00003.jpg'
-id = 'bCZ7Su4iwRParhcG5VT8qU'
-text = 'first bubble'
-
-[bubbles.5xdkWtyBkv23dWVJTwYvet]
-x = 100.0
-y = 100.0
-filename = '/mnt/SLOW_STORAGE/manga/crayon-shin-chan/[臼井儀人] クレヨンしんちゃん 第01巻/Shinchan 1_004.jpg'
-id = '5xdkWtyBkv23dWVJTwYvet'
+[bubbles.5rPTvyDCbMEhc7dnjGo1pZ]
+x = 201.31707763671875
+y = 402.2522888183594
+filename = '/mnt/SLOW_STORAGE/manga/Uzaki-Chan/Uzaki Chan wa Asobitai  v01/00007.jpg'
+id = '5rPTvyDCbMEhc7dnjGo1pZ'
 text = 'hello'
+
+[bubbles.mVqBSexKPFwePAijmxjyMK]
+x = 28.889190673828125
+y = 748.6199035644531
+filename = '/mnt/SLOW_STORAGE/manga/Uzaki-Chan/Uzaki Chan wa Asobitai  v01/00005.jpg'
+id = 'mVqBSexKPFwePAijmxjyMK'
+text = 'senpai'
+
+[bubbles.hf4A53eE3HMgBf2GoN2X7Q]
+x = 42.24639892578125
+y = 67.2750244140625
+filename = '/mnt/SLOW_STORAGE/manga/Uzaki-Chan/Uzaki Chan wa Asobitai  v01/00005.jpg'
+id = 'hf4A53eE3HMgBf2GoN2X7Q'
+text = 'rinokatsu no ko ?n wa igasu'
+
+[bubbles.bbbUoHz9eGidce8SyyvDnz]
+x = 117.67633056640625
+y = 79.47433471679688
+filename = '/mnt/SLOW_STORAGE/manga/Uzaki-Chan/Uzaki Chan wa Asobitai  v01/00006.jpg'
+id = 'bbbUoHz9eGidce8SyyvDnz'
+text = 'omae mata tsuite kun on...?'
+
+[bubbles.71a4teWdHayRZ41EwKhHKy]
+x = 29.687713623046875
+y = 545.0461730957031
+filename = '/mnt/SLOW_STORAGE/manga/dragon-quest/Dai no Daibouken v01/[三条陸×芝田優作] ドラゴンクエスト ダイの大冒険 勇者アバンと獄炎の魔王 第01巻/01662.jpg'
+id = '71a4teWdHayRZ41EwKhHKy'
+text = 'shiyuu'
+
+[bubbles.uVsxmFWw4ibaAaA6m3g6jy]
+x = 157.05958557128906
+y = 559.9185638427734
+filename = '/mnt/SLOW_STORAGE/manga/with-the-knowledge-of-my-previous-life/01/003.jpg'
+id = 'uVsxmFWw4ibaAaA6m3g6jy'
+text = ''

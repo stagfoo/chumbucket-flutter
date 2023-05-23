@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mix/mix.dart';
 import 'package:provider/provider.dart';
+import 'package:widget_zoom/widget_zoom.dart';
 // import 'package:webview_flutter/webview_flutter.dart';
 
 //Local
@@ -175,10 +176,18 @@ class AddMangaBookView extends StatelessWidget {
         children: [
           Center(
               child: Container(
+                  height: 300,
                   child: MangaBookItem(state: state, item: selectedItem))),
           TextButton(
               child: Text('Add Cover'),
               onPressed: () => {onPressAddCover(state)}),
+          Column(
+              children: state.addBookChapters.map((item) {
+            return Text(
+              item,
+              style: TextStyle(color: Colors.white),
+            );
+          }).toList()),
           TextButton(
               child: Text('Add Chapter'),
               onPressed: () => {onPressAddFolders(state)}),
@@ -192,8 +201,7 @@ class AddMangaBookView extends StatelessWidget {
 }
 
 class BubbleItem extends StatelessWidget {
-  const BubbleItem({Key? key, required this.item, required state})
-      : super(key: key);
+  BubbleItem({Key? key, required this.item, required state}) : super(key: key);
   final Bubble item;
 
   @override
@@ -205,33 +213,57 @@ class BubbleItem extends StatelessWidget {
       return Positioned(
         top: item.y,
         left: item.x,
-        child: GestureDetector(
-          onLongPressEnd: (details) => {onDbTapDeleteBubble(state, item)},
-          child: Container(
+        child: Draggable(
+          feedback: Container(
             height: 48,
             width: 250,
+            child: Text(textFieldController.text,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal)),
             padding: const EdgeInsets.only(left: 16, right: 32),
             decoration: const BoxDecoration(
               color: Colors.black,
-              borderRadius: BorderRadius.all(Radius.circular(100)),
-            ),
-            child: TextField(
-              maxLines: 2,
-              onTapOutside: (event) => {
-                onBubbleTextChange(state, textFieldController.text, item),
-              },
-              style: const TextStyle(color: Colors.white),
-              keyboardType: TextInputType.text,
-              controller: textFieldController,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                errorBorder: InputBorder.none,
-                disabledBorder: InputBorder.none,
-              ),
+              borderRadius: BorderRadius.all(Radius.circular(4)),
             ),
           ),
+          onDragStarted: () => {
+            //TODO hide OG
+          },
+          onDragEnd: (draggableDetails) => {
+            item.x = draggableDetails.offset.dx,
+            item.y = draggableDetails.offset.dy,
+            onBubbleTextChange(state, textFieldController.text, item),
+            //TODO show OG
+          },
+          child: Visibility(
+              visible: true,
+              child: Container(
+                height: 48,
+                width: 250,
+                padding: const EdgeInsets.only(left: 16, right: 32),
+                decoration: const BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                ),
+                child: TextField(
+                  maxLines: 2,
+                  onTapOutside: (event) => {
+                    onBubbleTextChange(state, textFieldController.text, item),
+                  },
+                  style: const TextStyle(color: Colors.white),
+                  keyboardType: TextInputType.text,
+                  controller: textFieldController,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                  ),
+                ),
+              )),
         ),
       );
     });
@@ -239,7 +271,7 @@ class BubbleItem extends StatelessWidget {
 }
 
 class BubbleListView extends StatelessWidget {
-  const BubbleListView({Key? key}) : super(key: key);
+  BubbleListView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -297,23 +329,17 @@ class MangaBookView extends StatelessWidget {
   const MangaBookView({Key? key, required state}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    Offset lastPress = const Offset(0, 0);
     try {
       return Consumer<GlobalState>(builder: (context, state, widget) {
-        return GestureDetector(
-            onLongPressDown: (details) {
-              lastPress = details.globalPosition;
-            },
-            onLongPressUp: () => {onTapCreateBubble(state, lastPress)},
-            child: Container(
-              margin: const EdgeInsets.only(top: 40),
-              decoration: const BoxDecoration(
-                color: Colors.lime,
-              ),
-              child: Image.file(
-                state.book[state.currentPageNumber],
-              ),
-            ));
+        return Container(
+          margin: const EdgeInsets.only(top: 40),
+          decoration: const BoxDecoration(
+            color: Colors.lime,
+          ),
+          child: Image.file(
+            state.book[state.currentPageNumber],
+          ),
+        );
       });
     } catch (err) {
       print('No Books to display');

@@ -129,14 +129,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.6"
-  draggable_widget:
-    dependency: "direct main"
-    description:
-      name: draggable_widget
-      sha256: d7f6b1eb9cb79b724b02dc2ac699f82d1ab20b99920b8b1f25812054d72ca803
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   equatable:
     dependency: transitive
     description:
@@ -177,6 +169,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.2"
+  floating_draggable_widget:
+    dependency: "direct main"
+    description:
+      name: floating_draggable_widget
+      sha256: "09319a9d421443b23c7968ba9c49ecb67bf6010ced8dac8fb2cf1773120cdf90"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -485,6 +485,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  widget_zoom:
+    dependency: "direct main"
+    description:
+      name: widget_zoom
+      sha256: f7c7352b5ea1f08e9419edddd938852239ad4c94ee70d29b5b5f142b04cb8eca
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   win32:
     dependency: transitive
     description:
