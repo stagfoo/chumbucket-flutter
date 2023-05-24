@@ -1,11 +1,11 @@
 //Libs
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 //Local
 import 'actions.dart';
 import 'store.dart';
-
 
 //------------------------PAGE----------------------------
 
@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
   const HomePage({Key? key, required this.state}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text("Home"),
@@ -30,7 +30,19 @@ class HomePage extends StatelessWidget {
       }),
       body: Consumer<GlobalState>(builder: (context, state, widget) {
         return Stack(
-          children: [Bucket(text: state.bucket.join(' '), state: state)],
+          children: [
+            DropdownButton<String>(
+              items: <String>['A', 'B', 'C', 'D'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (_) {},
+            ),
+            TextFormField(),
+            Bucket(text: state.bucket.join(' '), state: state)
+          ],
         );
       }),
     );

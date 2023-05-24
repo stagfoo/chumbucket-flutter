@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'dart:io';
 
 //Local
 import 'ui.dart';
@@ -13,12 +12,11 @@ void main() {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       enableLog: true,
-      themeMode: ThemeMode.light,
-      theme: ThemeData.light(),
+      theme: ThemeData.dark(),
       getPages: [
         GetPage(
             name: '/',
-             page: () =>
+            page: () =>
                 Consumer<GlobalState>(builder: (context, state, widget) {
                   return HomePage(state: state);
                 }),
