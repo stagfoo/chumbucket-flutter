@@ -41,5 +41,8 @@
             "code": ":release:",
             "description": "Release a new version.",
         },
+    ],
+    "cSpell.words": [
+        "Slugid"
     ]
 }

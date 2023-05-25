@@ -22,10 +22,17 @@ void main() {
                 }),
             transition: Transition.fadeIn),
         GetPage(
-            name: '/other-page',
+            name: '/decrypt',
             page: () =>
                 Consumer<GlobalState>(builder: (context, state, widget) {
-                  return OtherPage(state: state);
+                  return DecryptPage(state: state);
+                }),
+            transition: Transition.fadeIn),
+        GetPage(
+            name: '/keys',
+            page: () =>
+                Consumer<GlobalState>(builder: (context, state, widget) {
+                  return KeysPage(state: state);
                 }),
             transition: Transition.fadeIn),
       ],

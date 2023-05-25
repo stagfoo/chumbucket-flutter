@@ -10,13 +10,14 @@ Future<void> handleButtonClick(GlobalState state) async {
   state.addMeatToBucket('🍖');
 }
 
-
 Future<void> navigateToPage(GlobalState state, String page, int navbarIndex, BuildContext context) async {
+  print(page);
   switch (page) {
-    case 'other':
-      Get.toNamed('/other-page');
-      // Download shark json
-      state.setBucket(['🦈', '🦈', '🦈', '🦈']);
+    case 'keys':
+      Get.toNamed('/keys');
+      break;
+    case 'decrypt':
+      Get.toNamed('/decrypt');
       break;
     default:
       Get.toNamed('/');
@@ -38,4 +39,26 @@ loadToml(String name) async {
   var document = await TomlDocument.load(name);
   var documemnts = TomlDocument.parse(document.toString()).toMap();
   return documemnts;
+}
+
+Future<void> handleSelectKey(GlobalState state, String key) async {
+  state.selectPublicKey(key);
+}
+
+Future<void> handleAddTextToEncrypt(GlobalState state, String text) async {
+  state.setTextToEncrypt(text);
+}
+
+Future<void> handleAddTextToDecrypt(GlobalState state, String text) async {
+  state.setTextToDecrypt(text);
+}
+
+Future<void> handleOnPressAddNewKey(GlobalState state, String text) async {
+  //clear add new key text field
+  //Go to add new key page
+}
+
+Future<void> handleSelectKeyAsListItem(GlobalState state, String text) async {
+  //clear add new key text field
+  //Go to add new key page
 }

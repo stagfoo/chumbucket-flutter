@@ -1,4 +1,5 @@
 //Libs
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -15,33 +16,59 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text("Home"),
-      ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            handleButtonClick(state);
-          },
-          child: const Icon(Icons.add)),
       bottomNavigationBar:
           Consumer<GlobalState>(builder: (context, state, widget) {
         return BottomBar(state: state);
       }),
       body: Consumer<GlobalState>(builder: (context, state, widget) {
-        return Stack(
+        return Column(
           children: [
-            DropdownButton<String>(
-              items: <String>['A', 'B', 'C', 'D'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (_) {},
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Text("for keys:")),
+                Expanded(
+                  flex: 2,
+                  child: DropdownButton<String>(
+                    value: state.selectedPublicKey,
+                    items: <String>['', 'A', 'B', 'C', 'D'].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (key) {
+                      print(key);
+                      if(key is String){
+                        handleSelectKey(state, key);
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
-            TextFormField(),
-            Bucket(text: state.bucket.join(' '), state: state)
+            Column(
+              children: [
+                TextFormField(
+                  style: TextStyle(
+                    height: 5,
+                  ),
+                ),
+                TextButton(onPressed: () {
+
+                }, child: Text("encrypt //")),
+                TextFormField(
+                  style: TextStyle(
+                    height: 5,
+                  ),
+                ),
+                TextButton(onPressed: () {
+
+                }, child: Text("copy []"))
+              ],
+            ),
           ],
         );
       }),
@@ -49,36 +76,96 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class OtherPage extends StatelessWidget {
+class DecryptPage extends StatelessWidget {
   final GlobalState state;
-  const OtherPage({Key? key, required this.state}) : super(key: key);
+  const DecryptPage({Key? key, required this.state}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text("Other Page"),
-      ),
       bottomNavigationBar:
           Consumer<GlobalState>(builder: (context, state, widget) {
         return BottomBar(state: state);
       }),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            handleButtonClick(state);
-          },
-          child: const Icon(Icons.add)),
-      body: Stack(
-        children: [
-          Consumer<GlobalState>(builder: (context, state, widget) {
-            return Bucket(text: state.bucket.join(' '), state: state);
-          }),
-        ],
-      ),
+      body: Consumer<GlobalState>(builder: (context, state, widget) {
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Text("for keys:")),
+                Expanded(
+                  flex: 2,
+                  child: DropdownButton<String>(
+                    value: state.selectedPublicKey,
+                    items: <String>['', 'A', 'B', 'C', 'D'].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (key) {
+                      print(key);
+                      if(key is String){
+                        handleSelectKey(state, key);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                TextFormField(
+                  style: TextStyle(
+                    height: 5,
+                  ),
+                ),
+                TextButton(onPressed: () {
+
+                }, child: Text("encrypt //")),
+                TextFormField(
+                  style: TextStyle(
+                    height: 5,
+                  ),
+                ),
+                TextButton(onPressed: () {
+
+                }, child: Text("copy []"))
+              ],
+            ),
+          ],
+        );
+      }),
     );
   }
 }
+
+class KeysPage extends StatelessWidget {
+  final GlobalState state;
+  const KeysPage({Key? key, required this.state}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar:
+          Consumer<GlobalState>(builder: (context, state, widget) {
+        return BottomBar(state: state);
+      }),
+      body: Consumer<GlobalState>(builder: (context, state, widget) {
+        return Column(
+          children: [
+            
+            Column(),
+          ],
+        );
+      }),
+    );
+  }
+}
+
 
 class BottomBar extends StatelessWidget {
   const BottomBar({Key? key, required state}) : super(key: key);
@@ -90,16 +177,20 @@ class BottomBar extends StatelessWidget {
         selectedFontSize: 14,
         currentIndex: state.currentNavbarIndex,
         onTap: (value) {
-          navigateToPage(state, ['home', 'other'][value], value, context);
+          navigateToPage(state, ['encrypt', 'decrypt', 'keys'][value], value, context);
         },
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.password_outlined),
+            label: 'Encrypt',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_a_photo),
-            label: 'Other',
+            icon: Icon(Icons.abc),
+            label: 'Decrypt',
+          ),
+                   BottomNavigationBarItem(
+            icon: Icon(Icons.key),
+            label: 'Keys',
           ),
         ],
       );
