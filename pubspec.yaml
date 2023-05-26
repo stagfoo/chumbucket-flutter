@@ -1,5 +1,5 @@
-name: chumbucketdart
-description: A new Flutter project.
+name: karasu
+description: a simple app to encrypt and decrypt message for transferring over unsecure messaging apps
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -47,6 +47,7 @@ dependencies:
   provider: ^6.0.5
   flutter_launcher_icons: ^0.11.0
   dart_pg: ^1.1.4
+  flutter_conditional_rendering: ^2.0.0
 flutter_icons:
   image_path_ios: 'assets/Icon-1024.png'
   image_path_android: 'assets/Icon-1024.png'
