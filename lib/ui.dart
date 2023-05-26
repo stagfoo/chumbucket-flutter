@@ -63,11 +63,16 @@ class HomePage extends StatelessWidget {
             Column(
               children: [
                 TextFormField(
+                  onChanged: (text) {
+                    handleAddTextToEncrypt(state, text);
+                  },
                   style: const TextStyle(
                     height: 5,
                   ),
                 ),
-                TextButton(onPressed: () {}, child: const Text(ENCRYPT)),
+                TextButton(onPressed: () {
+                  handleEncryptMessage(state);
+                }, child: const Text(ENCRYPT)),
                 Text(state.encryptedText),
                 TextButton(onPressed: () {}, child: const Text(COPY))
               ],
@@ -134,11 +139,10 @@ class DecryptPage extends StatelessWidget {
                 TextFormField(
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
-                  style: const TextStyle(
-                    height: 5,
-                  ),
                 ),
-                TextButton(onPressed: () {}, child: const Text(DECRYPT)),
+                TextButton(onPressed: () {
+                  handleDecryptMessage(state);
+                }, child: const Text(DECRYPT)),
                 TextFormField(
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
@@ -168,18 +172,28 @@ class KeysPage extends StatelessWidget {
         return BottomBar(state: state);
       }),
       body: Consumer<GlobalState>(builder: (context, state, widget) {
-        return Column(
+        return Container(
+              padding: const EdgeInsets.all(8),
+              child: Column(
           children: [
-            Row(
+            Container(
+              padding: const EdgeInsets.all(8),
+              child: Row(
               children: [
-                TextButton(
-                    onPressed: () {
-                      navigateToPage(state, 'new-key', 2);
-                    },
-                    child: const Text(CREATE)),
-                TextButton(onPressed: () {}, child: const Text(IMPORT)),
+                OutlinedButton(
+                  onPressed: () {
+                    navigateToPage(state, 'new-key', 2);
+                  },
+                  child: const Text(CREATE),
+                ),
+                 OutlinedButton(
+                  onPressed: () {
+                    navigateToPage(state, 'new-key', 2);
+                  },
+                  child: const Text(IMPORT),
+                )
               ],
-            ),
+            )),
             const Text(KEY_LIBRARY, textAlign: TextAlign.left),
             KeyList(state: state),
             const Text(
@@ -189,12 +203,18 @@ class KeysPage extends StatelessWidget {
             KeyInfo(selectedKey: state.selectedPGPKey, state: state),
             Row(
               children: [
-                TextButton(onPressed: () {}, child: const Text(DELETE)),
-                TextButton(onPressed: () {}, child: const Text(COPY)),
+                OutlinedButton(
+                  onPressed: () {},
+                  child: const Text(DELETE),
+                ),
+                OutlinedButton(
+                  onPressed: () {},
+                  child: const Text(COPY),
+                ),
               ],
             ),
           ],
-        );
+        ));
       }),
     );
   }
@@ -222,16 +242,18 @@ class NewKeyPage extends StatelessWidget {
                 NewKeyTable(state: state),
                 Row(
                   children: [
-                    TextButton(
-                        onPressed: () {
-                          navigateToPage(state, 'keys', 2);
-                        },
-                        child: const Text(CANCEL)),
-                    TextButton(
-                        onPressed: () {
-                          handleOnPressAddNewKey(state);
-                        },
-                        child: const Text(CREATE)),
+                    OutlinedButton(
+                      onPressed: () {
+                        navigateToPage(state, 'keys', 2);
+                      },
+                      child: const Text(CANCEL),
+                    ),
+                    OutlinedButton(
+                      onPressed: () {
+                        handleOnPressAddNewKey(state);
+                      },
+                      child: const Text(CREATE),
+                    ),
                   ],
                 ),
               ],

@@ -91,8 +91,8 @@ class GlobalState extends ChangeNotifier {
     notifyListeners();
   }
   void setTextToEncrypt(String text) {
+    print(text);
     textToEncrypt = text;
-    notifyListeners();
   }
   void setTextToDecrypt(String text) {
     textToDecrypt = text;

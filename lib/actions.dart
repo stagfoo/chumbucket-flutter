@@ -50,7 +50,7 @@ loadToml(String name) async {
 }
 
 Future<void> handleSelectKey(GlobalState state, String key) async {
-  // state.selectPublicKey(key);
+  state.selectPublicKey(key);
   print(key);
 }
 
@@ -60,6 +60,43 @@ Future<void> handleAddTextToEncrypt(GlobalState state, String text) async {
 
 Future<void> handleAddTextToDecrypt(GlobalState state, String text) async {
   state.setTextToDecrypt(text);
+}
+
+Future<PGPKey> getKeyFromKeyring(GlobalState state) async {
+  return state.keyring.firstWhere((element) => element.id.toString() == state.selectedPublicKey);
+}
+ 
+
+Future<void> handleEncryptMessage(GlobalState state) async {
+  var text = Message.createTextMessage(state.textToEncrypt);
+  var key = state.keyring.firstWhere((element) => element.id.toString() == state.selectedPublicKey);
+  final encryptedMessage = await OpenPGP.encrypt(
+    text, passwords: ['test']
+  );
+  print(text);
+  print(key.publicKey.toString());
+  print(encryptedMessage.armor());
+}
+
+Future<void> handleDecryptMessage(GlobalState state) async {
+  var key = await getKeyFromKeyring(state);
+  var text = Message.createTextMessage(state.textToDecrypt);
+  const password = 'test';
+  final armoredPublicKeys = [key.publicKey.armor()];
+  final armoredPrivateKey = key.privateKey.armor();
+
+  final publicKeys = await Future.wait(
+    armoredPublicKeys.map((armored) => OpenPGP.readPublicKey(armored)),
+  );
+  final privateKey = await OpenPGP.decryptPrivateKey(armoredPrivateKey, password);
+
+  final encryptedMessage = await OpenPGP.encrypt(
+    text,
+    encryptionKeys: publicKeys,
+    signingKeys: [privateKey],
+  );
+  final encrypted = encryptedMessage.armor();
+  print(encrypted);
 }
 
 Future<void> handleUpdateNewKeyDetails(GlobalState state,  String key, String text) async {
