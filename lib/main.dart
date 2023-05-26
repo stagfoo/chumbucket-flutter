@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+
 //Local
 import 'ui.dart';
 import 'store.dart';
 
-void main() {
+void main() async {
   runApp(ChangeNotifierProvider(
     child: GetMaterialApp(
       debugShowCheckedModeBanner: false,

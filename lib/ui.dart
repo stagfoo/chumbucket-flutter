@@ -1,8 +1,10 @@
 //Libs
+import 'package:dart_pg/dart_pg.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_conditional_rendering/flutter_conditional_rendering.dart';
 
 //Local
 import 'actions.dart';
@@ -32,17 +34,28 @@ class HomePage extends StatelessWidget {
                     child: const Text(FOR_KEYS)),
                 Expanded(
                   flex: 2,
-                  child: DropdownButton<String>(
-                    value: state.selectedPublicKey,
-                    items: state.keyring.map((value) {
-                      return DropdownMenuItem<String>(
-                        value: value.publicKey,
-                        child: Text(value.name),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      handleSelectKey(state, value!);
-                    },
+                  child: Conditional.single(
+                    context: context,
+                    conditionBuilder: (BuildContext context) =>
+                        state.keyring.isNotEmpty,
+                    widgetBuilder: (BuildContext context) =>
+                        DropdownButton<String>(
+                      value: state.selectedPublicKey,
+                      items: state.keyring.map((value) {
+                        return DropdownMenuItem<String>(
+                          value: value.id.toString(),
+                          child: Text(value.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        handleSelectKey(state, value!);
+                      },
+                    ),
+                    fallbackBuilder: (BuildContext context) => TextButton(
+                        onPressed: () {
+                          navigateToPage(state, 'new-key', 2);
+                        },
+                        child: Text(CREATE)),
                   ),
                 ),
               ],
@@ -55,11 +68,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 TextButton(onPressed: () {}, child: const Text(ENCRYPT)),
-                TextFormField(
-                  style: const TextStyle(
-                    height: 5,
-                  ),
-                ),
+                Text(state.encryptedText),
                 TextButton(onPressed: () {}, child: const Text(COPY))
               ],
             ),
@@ -92,20 +101,28 @@ class DecryptPage extends StatelessWidget {
                     child: const Text(FOR_KEYS)),
                 Expanded(
                   flex: 2,
-                  child: DropdownButton<String>(
-                    value: state.selectedPublicKey,
-                    items: state.keyring.map((value) {
-                      return DropdownMenuItem<String>(
-                        value: value.publicKey,
-                        child: Text(value.name),
-                      );
-                    }).toList(),
-                    onChanged: (key) {
-                      print(key);
-                      if (key is String) {
-                        handleSelectKey(state, key);
-                      }
-                    },
+                  child: Conditional.single(
+                    context: context,
+                    conditionBuilder: (BuildContext context) =>
+                        state.keyring.isNotEmpty,
+                    widgetBuilder: (BuildContext context) =>
+                        DropdownButton<String>(
+                      value: state.selectedPublicKey,
+                      items: state.keyring.map((value) {
+                        return DropdownMenuItem<String>(
+                          value: value.id.toString(),
+                          child: Text(value.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        handleSelectKey(state, value!);
+                      },
+                    ),
+                    fallbackBuilder: (BuildContext context) => TextButton(
+                        onPressed: () {
+                          navigateToPage(state, 'new-key', 2);
+                        },
+                        child: Text(CREATE)),
                   ),
                 ),
               ],
@@ -113,7 +130,7 @@ class DecryptPage extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                //TODO component
+                //TODO move to component
                 TextFormField(
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
@@ -174,7 +191,6 @@ class KeysPage extends StatelessWidget {
               children: [
                 TextButton(onPressed: () {}, child: const Text(DELETE)),
                 TextButton(onPressed: () {}, child: const Text(COPY)),
-                TextButton(onPressed: () {}, child: const Text(COPY)),
               ],
             ),
           ],
@@ -196,22 +212,30 @@ class NewKeyPage extends StatelessWidget {
         return BottomBar(state: state);
       }),
       body: Consumer<GlobalState>(builder: (context, state, widget) {
-        return Column(
-          children: [
-            const Text(CREATE_NEW_PAIR, textAlign: TextAlign.left),
-            NewKeyTable(state: state),
-            Row(
+        return Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
               children: [
-                TextButton(
-                    onPressed: () {
-                      navigateToPage(state, 'keys', 2);
-                    },
-                    child: const Text(CANCEL)),
-                TextButton(onPressed: () {}, child: const Text(CREATE)),
+                const Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(CREATE_NEW_PAIR, textAlign: TextAlign.left)),
+                NewKeyTable(state: state),
+                Row(
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          navigateToPage(state, 'keys', 2);
+                        },
+                        child: const Text(CANCEL)),
+                    TextButton(
+                        onPressed: () {
+                          handleOnPressAddNewKey(state);
+                        },
+                        child: const Text(CREATE)),
+                  ],
+                ),
               ],
-            ),
-          ],
-        );
+            ));
       }),
     );
   }
@@ -255,19 +279,19 @@ class KeyList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<GlobalState>(builder: (context, state, widget) {
       return Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Table(
               border: TableBorder.all(
                   color: Colors.grey, width: 1, style: BorderStyle.solid),
-              columnWidths: {
+              columnWidths: const {
                 1: FractionColumnWidth(.1),
               },
               children: state.keyring.map((e) {
                 return TableRow(children: [
                   Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Text(e.name, textAlign: TextAlign.left)),
-                  Padding(
+                  const Padding(
                       padding: EdgeInsets.all(10),
                       child: Text('P', textAlign: TextAlign.center))
                 ]);
@@ -277,30 +301,43 @@ class KeyList extends StatelessWidget {
 }
 
 class BorderedItem extends StatelessWidget {
-  const BorderedItem({Key? key, required state}) : super(key: key);
+  final String title;
+  final void Function(String)? onChanged;
+  const BorderedItem(
+      {Key? key, required this.title, required this.onChanged, required state})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<GlobalState>(builder: (context, state, widget) {
       return Container(
-          decoration: BoxDecoration(
-              // Red border with the width is equal to 5
-              border: Border.all(width: 1, color: Colors.grey)),
+          decoration: const BoxDecoration(
+            // Red border with the width is equal to 5
+            border: Border.symmetric(
+              horizontal: BorderSide(width: 1, color: Colors.grey),
+              vertical: BorderSide(width: 0, color: Colors.grey),
+            ),
+          ),
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.fromLTRB(4, 16, 4, 16),
-                decoration: BoxDecoration(
+                width: 100,
+                padding: const EdgeInsets.fromLTRB(4, 16, 4, 16),
+                decoration: const BoxDecoration(
                   border: Border.symmetric(
                       vertical: BorderSide(width: 1, color: Colors.grey)),
                 ),
-                child: Text("crypo"),
+                child: Text(title),
               ),
               Expanded(
                 child: SizedBox(
                   child: Padding(
-                      child: TextFormField(),
-                      padding: EdgeInsets.fromLTRB(8, 0, 8, 0)),
+                      child: TextFormField(
+                        decoration:
+                            const InputDecoration(border: InputBorder.none),
+                        onChanged: onChanged,
+                      ),
+                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0)),
                 ),
               ),
             ],
@@ -316,15 +353,39 @@ class NewKeyTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<GlobalState>(builder: (context, state, widget) {
       return Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              BorderedItem(state: state),
-              BorderedItem(state: state),
-              BorderedItem(state: state),
-              BorderedItem(state: state),
-              BorderedItem(state: state),
-              BorderedItem(state: state),
+              BorderedItem(
+                  state: state,
+                  title: 'Name',
+                  onChanged: (value) {
+                    handleUpdateNewKeyDetails(state, 'name', value);
+                  }),
+              BorderedItem(
+                  state: state,
+                  title: 'Email',
+                  onChanged: (value) {
+                    handleUpdateNewKeyDetails(state, 'email', value);
+                  }),
+              BorderedItem(
+                  state: state,
+                  title: 'Crypto',
+                  onChanged: (value) {
+                    handleUpdateNewKeyDetails(state, 'type', value);
+                  }),
+              BorderedItem(
+                  state: state,
+                  title: 'Password',
+                  onChanged: (value) {
+                    handleUpdateNewKeyDetails(state, 'password', value);
+                  }),
+              BorderedItem(
+                  state: state,
+                  title: 'Added',
+                  onChanged: (value) {
+                    handleUpdateNewKeyDetails(state, 'dateAdded', value);
+                  }),
             ],
           ));
     });
@@ -340,45 +401,19 @@ class KeyInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<GlobalState>(builder: (context, state, widget) {
+      if (selectedKey == null) {
+        return Container();
+      }
       return Padding(
-          padding: EdgeInsets.all(10),
-          child: Table(
-            border: TableBorder.all(
-                color: Colors.grey, width: 1, style: BorderStyle.solid),
-            columnWidths: {
-              0: FractionColumnWidth(.2),
-            },
+          padding: const EdgeInsets.all(10),
+          child: Column(
             children: [
-              // TableRow(children: [
-              //   Text("crypto"),
-              //   Text(selectedKey.name)
-              // ]),
-              TableRow(children: [
-                Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text("added", textAlign: TextAlign.left)),
-                Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text(selectedKey.name, textAlign: TextAlign.left)),
-              ]),
-              TableRow(children: [
-                Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text("added", textAlign: TextAlign.left)),
-                Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text(selectedKey.id.toString(),
-                        textAlign: TextAlign.left)),
-              ]),
-              TableRow(children: [
-                Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text("added", textAlign: TextAlign.left)),
-                Padding(
-                    padding: EdgeInsets.all(10),
-                    child:
-                        Text(selectedKey.updatedAt, textAlign: TextAlign.left)),
-              ]),
+              BorderedItem(
+                  state: state,
+                  title: 'Name',
+                  onChanged: (value) {
+                    handleUpdateNewKeyDetails(state, 'name', value);
+                  })
             ],
           ));
     });
