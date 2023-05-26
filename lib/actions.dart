@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:toml/toml.dart';
+import 'package:clipboard/clipboard.dart';
 
 import 'store.dart';
 
@@ -68,20 +69,9 @@ Future<PGPKey> getKeyFromKeyring(GlobalState state) async {
  
 
 Future<void> handleEncryptMessage(GlobalState state) async {
+var key = await getKeyFromKeyring(state);
   var text = Message.createTextMessage(state.textToEncrypt);
-  var key = state.keyring.firstWhere((element) => element.id.toString() == state.selectedPublicKey);
-  final encryptedMessage = await OpenPGP.encrypt(
-    text, passwords: ['test']
-  );
-  print(text);
-  print(key.publicKey.toString());
-  print(encryptedMessage.armor());
-}
-
-Future<void> handleDecryptMessage(GlobalState state) async {
-  var key = await getKeyFromKeyring(state);
-  var text = Message.createTextMessage(state.textToDecrypt);
-  const password = 'test';
+  var password = state.selectedKeyPassword;
   final armoredPublicKeys = [key.publicKey.armor()];
   final armoredPrivateKey = key.privateKey.armor();
 
@@ -97,6 +87,26 @@ Future<void> handleDecryptMessage(GlobalState state) async {
   );
   final encrypted = encryptedMessage.armor();
   print(encrypted);
+  state.setEncryptedText(encrypted);
+
+}
+
+Future<void> handleDecryptMessage(GlobalState state) async {
+  var key = await getKeyFromKeyring(state);
+  var armoredMessage = state.textToDecrypt;
+  var password = state.selectedKeyPassword;
+  final armoredPublicKey = key.publicKey.armor();
+  final armoredPrivateKey = key.privateKey.armor();
+
+  final publicKey = await OpenPGP.readPublicKey(armoredPublicKey);
+  final privateKey = await OpenPGP.decryptPrivateKey(armoredPrivateKey, password);
+
+  final decryptedMessage = await OpenPGP.decrypt(
+    await OpenPGP.readMessage(armoredMessage),
+    decryptionKeys: [privateKey],
+    verificationKeys: [publicKey],
+  );
+  state.setDecryptedText(decryptedMessage.literalData!.text);
 }
 
 Future<void> handleUpdateNewKeyDetails(GlobalState state,  String key, String text) async {
@@ -106,13 +116,12 @@ Future<void> handleUpdateNewKeyDetails(GlobalState state,  String key, String te
 }
 Future<void> handleOnPressAddNewKey(GlobalState state) async {
   final passphrase = state.newKeyPassword;
-  print(state.newKeyEmail);
   final userID = [state.newKeyName, '($state.newKeyName)','<$state.newKeyEmail>'].join(' ');
   final privateKey = await OpenPGP.generateKey(
       [userID],
       passphrase,
       type: KeyGenerationType.rsa,
-      rsaKeySize: RSAKeySize.s4096,
+      rsaKeySize: RSAKeySize.s2048,
   );
   final publicKey = privateKey.toPublic;
   state.addNewKey(state.newKeyName, publicKey, privateKey, state.newKeyEmail);
@@ -124,6 +133,16 @@ Future<void> handleOnPressAddNewKey(GlobalState state) async {
 Future<void> handleSelectKeyAsListItem(GlobalState state, String text) async {
   //clear add new key text field
   //Go to add new key page
+}
+
+Future<void> setSelectedKeyPassword(GlobalState state, String text) async {
+  state.setSelectedKeyPassword(text);
+}
+
+Future<void> copyToClipboard(GlobalState state, String text) async {
+  FlutterClipboard.copy(text).then(( value ) => {
+    print('copied')
+  });
 }
 
 

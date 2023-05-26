@@ -40,6 +40,7 @@ class GlobalState extends ChangeNotifier {
   String selectedPublicKey = '';
   String selectedPrivateKey = '';
   PGPKey selectedPGPKey = PGPKey();
+  String selectedKeyPassword = '';
 
   String newKeyName = '';
   String newKeyEmail = '';
@@ -78,6 +79,11 @@ class GlobalState extends ChangeNotifier {
     notifyListeners();
   }
 
+  
+  void setSelectedKeyPassword(String value) {
+    selectedKeyPassword = value;
+  }
+
   void saveNavbarIndex(int value) {
     currentNavbarIndex = value;
     notifyListeners();
@@ -96,6 +102,14 @@ class GlobalState extends ChangeNotifier {
   }
   void setTextToDecrypt(String text) {
     textToDecrypt = text;
+    notifyListeners();
+  }
+  void setDecryptedText(String text) {
+    decryptedText = text;
+    notifyListeners();
+  }
+  void setEncryptedText(String text) {
+    encryptedText = text;
     notifyListeners();
   }
 }

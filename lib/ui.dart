@@ -60,21 +60,41 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
+            Padding(child: BorderedItem(title: "password", onChanged: (text) {
+                    setSelectedKeyPassword(state, text);
+                  }, state: state),
+                  padding: EdgeInsets.all(16),
+            ),
+            
             Column(
               children: [
-                TextFormField(
+                Container(
+                  height: 200,
+                  padding: const EdgeInsets.all(16),
+                  child: TextFormField(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
                   onChanged: (text) {
                     handleAddTextToEncrypt(state, text);
                   },
-                  style: const TextStyle(
-                    height: 5,
-                  ),
                 ),
-                TextButton(onPressed: () {
-                  handleEncryptMessage(state);
-                }, child: const Text(ENCRYPT)),
-                Text(state.encryptedText),
-                TextButton(onPressed: () {}, child: const Text(COPY))
+                ),
+                TextButton(
+                    onPressed: () {
+                      handleEncryptMessage(state);
+                    },
+                    child: const Text(ENCRYPT)),
+                Container(
+                  child: Text(state.encryptedText,
+                      style: const TextStyle(fontSize: 7)),
+                  height: 200,
+                  padding: const EdgeInsets.all(10),
+                ),
+                TextButton(
+                    onPressed: () {
+                      copyToClipboard(state, state.encryptedText);
+                    },
+                    child: const Text(COPY))
               ],
             ),
           ],
@@ -137,18 +157,25 @@ class DecryptPage extends StatelessWidget {
               children: [
                 //TODO move to component
                 TextFormField(
+                  onChanged: (value) => handleAddTextToDecrypt(state, value),
+                  decoration: const InputDecoration(
+                    constraints: BoxConstraints(
+                      maxHeight: 200,
+                    ),
+                  ),
+                  scrollController: ScrollController(),
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                 ),
-                TextButton(onPressed: () {
-                  handleDecryptMessage(state);
-                }, child: const Text(DECRYPT)),
+                TextButton(
+                    onPressed: () {
+                      handleDecryptMessage(state);
+                    },
+                    child: const Text(DECRYPT)),
                 TextFormField(
+                  scrollController: ScrollController(),
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
-                  style: const TextStyle(
-                    height: 5,
-                  ),
                 ),
                 TextButton(onPressed: () {}, child: const Text(COPY))
               ],
@@ -173,48 +200,48 @@ class KeysPage extends StatelessWidget {
       }),
       body: Consumer<GlobalState>(builder: (context, state, widget) {
         return Container(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              child: Row(
+            padding: const EdgeInsets.all(8),
+            child: Column(
               children: [
-                OutlinedButton(
-                  onPressed: () {
-                    navigateToPage(state, 'new-key', 2);
-                  },
-                  child: const Text(CREATE),
+                Container(
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        OutlinedButton(
+                          onPressed: () {
+                            navigateToPage(state, 'new-key', 2);
+                          },
+                          child: const Text(CREATE),
+                        ),
+                        OutlinedButton(
+                          onPressed: () {
+                            navigateToPage(state, 'new-key', 2);
+                          },
+                          child: const Text(IMPORT),
+                        )
+                      ],
+                    )),
+                const Text(KEY_LIBRARY, textAlign: TextAlign.left),
+                KeyList(state: state),
+                const Text(
+                  SELECTED_KEYS_INFO,
+                  textAlign: TextAlign.left,
                 ),
-                 OutlinedButton(
-                  onPressed: () {
-                    navigateToPage(state, 'new-key', 2);
-                  },
-                  child: const Text(IMPORT),
-                )
+                KeyInfo(selectedKey: state.selectedPGPKey, state: state),
+                Row(
+                  children: [
+                    OutlinedButton(
+                      onPressed: () {},
+                      child: const Text(DELETE),
+                    ),
+                    OutlinedButton(
+                      onPressed: () {},
+                      child: const Text(COPY),
+                    ),
+                  ],
+                ),
               ],
-            )),
-            const Text(KEY_LIBRARY, textAlign: TextAlign.left),
-            KeyList(state: state),
-            const Text(
-              SELECTED_KEYS_INFO,
-              textAlign: TextAlign.left,
-            ),
-            KeyInfo(selectedKey: state.selectedPGPKey, state: state),
-            Row(
-              children: [
-                OutlinedButton(
-                  onPressed: () {},
-                  child: const Text(DELETE),
-                ),
-                OutlinedButton(
-                  onPressed: () {},
-                  child: const Text(COPY),
-                ),
-              ],
-            ),
-          ],
-        ));
+            ));
       }),
     );
   }
