@@ -1,12 +1,9 @@
-import 'dart:io';
-
-import 'package:chumbucketdart/actions.dart';
 import 'package:flutter/material.dart';
 import 'package:slugid/slugid.dart';
-import 'package:short_uuids/short_uuids.dart';
 
 var localDBFile = 'database.toml';
 
+//TODO how can i set this like a function?
 class PGPKey {
   String name = '';
   String publicKey = '';
@@ -17,19 +14,43 @@ class PGPKey {
   String deletedAt = '';
 }
 
+PGPKey createFakeKey(String name, String pub, String priv) {
+  var newKey = PGPKey();
+  newKey.name = name;
+  newKey.publicKey = pub;
+  newKey.privateKey = priv;
+  return newKey;
+}
+
+class PGPKeyPair {
+  String publicKey = '';
+  String privateKey = '';
+}
 
 class GlobalState extends ChangeNotifier {
   int currentNavbarIndex = 0;
   List<String> bucket = [];
-  List<PGPKey> keyring = [];
+  List<PGPKey> keyring = [
+    createFakeKey("yo@stagfoo.com", "pubkey1", "privkey1"),
+    createFakeKey("basal@basal.dev" , "pubkey", "privkey"),
+  ];
   String textToEncrypt = '';
   String textToDecrypt = '';
-  String selectedPublicKey = '';
-  String selectedPrivateKey = '';
+  String selectedPublicKey = 'pubkey1';
+  String selectedPrivateKey = 'pubkey1';
+  late PGPKey selectedPGPKey = keyring[0];
+  late PGPKey newKey;
 
-
-  void addMeatToBucket(String emojiText) {
-    bucket.add(emojiText);
+  void addNewKey(String name, String pub, String priv) {
+    var newKey = PGPKey();
+    newKey.name = name;
+    newKey.publicKey = pub;
+    newKey.privateKey = priv;
+    newKey.privateKey = priv;
+    newKey.createdAt = DateTime.now().toString();
+    newKey.updatedAt = DateTime.now().toString();
+    newKey.deletedAt = '';
+    keyring.add(newKey);
     notifyListeners();
   }
   void setBucket(List<String> value) {

@@ -35,6 +35,13 @@ void main() {
                   return KeysPage(state: state);
                 }),
             transition: Transition.fadeIn),
+        GetPage(
+            name: '/new-key',
+            page: () =>
+                Consumer<GlobalState>(builder: (context, state, widget) {
+                  return NewKeyPage(state: state);
+                }),
+            transition: Transition.fadeIn),
       ],
     ),
     create: (context) => GlobalState(),

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
@@ -6,11 +7,7 @@ import 'package:toml/toml.dart';
 
 import 'store.dart';
 
-Future<void> handleButtonClick(GlobalState state) async {
-  state.addMeatToBucket('🍖');
-}
-
-Future<void> navigateToPage(GlobalState state, String page, int navbarIndex, BuildContext context) async {
+Future<void> navigateToPage(GlobalState state, String page, int navbarIndex) async {
   print(page);
   switch (page) {
     case 'keys':
@@ -18,6 +15,9 @@ Future<void> navigateToPage(GlobalState state, String page, int navbarIndex, Bui
       break;
     case 'decrypt':
       Get.toNamed('/decrypt');
+      break;
+    case 'new-key':
+      Get.toNamed('/new-key');
       break;
     default:
       Get.toNamed('/');
@@ -53,7 +53,9 @@ Future<void> handleAddTextToDecrypt(GlobalState state, String text) async {
   state.setTextToDecrypt(text);
 }
 
-Future<void> handleOnPressAddNewKey(GlobalState state, String text) async {
+Future<void> handleOnPressAddNewKey(GlobalState state) async {
+  state.addNewKey('', '', '');
+
   //clear add new key text field
   //Go to add new key page
 }
@@ -62,3 +64,5 @@ Future<void> handleSelectKeyAsListItem(GlobalState state, String text) async {
   //clear add new key text field
   //Go to add new key page
 }
+
+
