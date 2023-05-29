@@ -27,7 +27,6 @@ class HomePage extends StatelessWidget {
         return Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                     padding: const EdgeInsets.all(10),
@@ -51,7 +50,7 @@ class HomePage extends StatelessWidget {
                         handleSelectKey(state, value!);
                       },
                     ),
-                    fallbackBuilder: (BuildContext context) => TextButton(
+                    fallbackBuilder: (BuildContext context) => OutlinedButton(
                         onPressed: () {
                           navigateToPage(state, 'new-key', 2);
                         },
@@ -60,41 +59,44 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(child: BorderedItem(title: "password", onChanged: (text) {
+            Padding(
+              child: BorderedItem(
+                  title: "password",
+                  onChanged: (text) {
                     setSelectedKeyPassword(state, text);
-                  }, state: state),
-                  padding: EdgeInsets.all(16),
+                  },
+                  state: state),
+              padding: EdgeInsets.all(16),
             ),
-            
             Column(
               children: [
                 Container(
                   height: 200,
                   padding: const EdgeInsets.all(16),
                   child: TextFormField(
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  onChanged: (text) {
-                    handleAddTextToEncrypt(state, text);
-                  },
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    onChanged: (text) {
+                      handleAddTextToEncrypt(state, text);
+                    },
+                  ),
                 ),
-                ),
-                TextButton(
+                OutlinedButton(
                     onPressed: () {
                       handleEncryptMessage(state);
                     },
-                    child: const Text(ENCRYPT)),
+                    child: Text(ENCRYPT)),
                 Container(
                   child: Text(state.encryptedText,
                       style: const TextStyle(fontSize: 7)),
                   height: 200,
                   padding: const EdgeInsets.all(10),
                 ),
-                TextButton(
+                OutlinedButton(
                     onPressed: () {
                       copyToClipboard(state, state.encryptedText);
                     },
-                    child: const Text(COPY))
+                    child: Text(COPY))
               ],
             ),
           ],
@@ -125,32 +127,40 @@ class DecryptPage extends StatelessWidget {
                     padding: const EdgeInsets.all(10),
                     child: const Text(FOR_KEYS)),
                 Expanded(
-                  flex: 2,
-                  child: Conditional.single(
-                    context: context,
-                    conditionBuilder: (BuildContext context) =>
-                        state.keyring.isNotEmpty,
-                    widgetBuilder: (BuildContext context) =>
-                        DropdownButton<String>(
-                      value: state.selectedPublicKey,
-                      items: state.keyring.map((value) {
-                        return DropdownMenuItem<String>(
-                          value: value.id.toString(),
-                          child: Text(value.name),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        handleSelectKey(state, value!);
-                      },
-                    ),
-                    fallbackBuilder: (BuildContext context) => TextButton(
-                        onPressed: () {
-                          navigateToPage(state, 'new-key', 2);
+                    flex: 2,
+                    child: Conditional.single(
+                      context: context,
+                      conditionBuilder: (BuildContext context) =>
+                          state.keyring.isNotEmpty,
+                      widgetBuilder: (BuildContext context) =>
+                          DropdownButton<String>(
+                        value: state.selectedPublicKey,
+                        items: state.keyring.map((value) {
+                          return DropdownMenuItem<String>(
+                            value: value.id.toString(),
+                            child: Text(value.name),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          handleSelectKey(state, value!);
                         },
-                        child: Text(CREATE)),
-                  ),
-                ),
+                      ),
+                      fallbackBuilder: (BuildContext context) => OutlinedButton(
+                          onPressed: () {
+                            navigateToPage(state, 'new-key', 2);
+                          },
+                          child: Text(CREATE)),
+                    )),
               ],
+            ),
+            Padding(
+              child: BorderedItem(
+                  title: "password",
+                  onChanged: (text) {
+                    setSelectedKeyPassword(state, text);
+                  },
+                  state: state),
+              padding: EdgeInsets.all(16),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -167,17 +177,22 @@ class DecryptPage extends StatelessWidget {
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                 ),
-                TextButton(
+                OutlinedButton(
                     onPressed: () {
                       handleDecryptMessage(state);
                     },
-                    child: const Text(DECRYPT)),
-                TextFormField(
-                  scrollController: ScrollController(),
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
+                    child: Text(DECRYPT)),
+                Container(
+                  child: Text(state.decryptedText,
+                      style: const TextStyle(fontSize: 7)),
+                  height: 200,
+                  padding: const EdgeInsets.all(16),
                 ),
-                TextButton(onPressed: () {}, child: const Text(COPY))
+                OutlinedButton(
+                    onPressed: () {
+                      copyToClipboard(state, state.decryptedText);
+                    },
+                    child: const Text(COPY))
               ],
             ),
           ],
@@ -296,7 +311,9 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<GlobalState>(builder: (context, state, widget) {
-      return BottomNavigationBar(
+      return Container(
+          child: BottomNavigationBar(
+        backgroundColor: Colors.black,
         selectedFontSize: 14,
         currentIndex: state.currentNavbarIndex,
         onTap: (value) {
@@ -316,7 +333,7 @@ class BottomBar extends StatelessWidget {
             label: 'Keys',
           ),
         ],
-      );
+      ));
     });
   }
 }
@@ -328,7 +345,7 @@ class KeyList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<GlobalState>(builder: (context, state, widget) {
       return Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(8),
           child: Table(
               border: TableBorder.all(
                   color: Colors.grey, width: 1, style: BorderStyle.solid),
@@ -338,10 +355,10 @@ class KeyList extends StatelessWidget {
               children: state.keyring.map((e) {
                 return TableRow(children: [
                   Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(8),
                       child: Text(e.name, textAlign: TextAlign.left)),
                   const Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(8),
                       child: Text('P', textAlign: TextAlign.center))
                 ]);
               }).toList()));

@@ -13,7 +13,14 @@ void main() async {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       enableLog: true,
-      theme: ThemeData.dark(),
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Colors.black,
+    colorScheme: ThemeData.dark().colorScheme.copyWith(
+      background: Colors.black,
+      onPrimary: const Color(0xffffffff),
+      secondary: const Color(0xffffE0B2),
+    ),
+  ),
       getPages: [
         GetPage(
             name: '/',
