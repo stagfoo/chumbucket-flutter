@@ -1,41 +1,40 @@
-<p align="center"><img width="300px" src="https://github.com/stagfoo/chumbucket/blob/master/.readme/logo.png?raw=true" />(but like in flutter)
+<p align="center"><img width="256px" src="./assets/Icon-256.png" />
 </p>
+<h3 align="center">Chumbucket</h3>
 <p align="center">A kit to build quick demo applications and test ideas (chumming the water so to speak)</p>
-<hr>
-<p align="center">
-<a href="https://opensource.org/licenses/MIT">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" />
-</a>
-</p>
 
 ---
 
-//TODO rename to gudgeon
-
 # Get Started
 
-run developement
+run in development
 
-```
+```bash
 flutter run -d linux
-//or flutter run -d macos
+# flutter run -d macos
+# flutter run -d windows
 ```
+Press `r` in the terminal to reload in application
 
-# Why did we develop this?
 
-- To build quick demo applications and test ideas.
-- Its got one global state focusing on (data = view)
-- Routing is super transparent
-- Who needs folders in such small apps
-- Simple entry point if you want to change the UI
-- compiles to native executables like ios, android and desktops so you dont need a wrapper.
+# Why did you make this boilerplate?
+
+I made this for myself to help make applications that are: 
+- 🎯 [SRP](https://en.wikipedia.org/wiki/Single-responsibility_principle) focused 
+- 🚸 Cross platform
+- 🛖 Offline first
+- 🪣 Offline data sharing with TOML
+
+More information in my blog post: [Bringing back dumb programs](https://blog.stagfoo.com/post/dumb-programs/)
 
 # Whats inside
 
 - 🖼️ UI = MaterialApp
+- 🍹 Styles = MaterialApp
 - 🍖 Store = Getx
 - 🦴 Router = Getx
-- 🍹 Styles = MaterialApp
+- 🪣 Storage = TOML
+
 
 # What is a chumbucket?
 
