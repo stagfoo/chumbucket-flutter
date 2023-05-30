@@ -8,6 +8,7 @@ import 'store.dart';
 
 Future<void> handleButtonClick(GlobalState state) async {
   state.addMeatToBucket('🍖');
+  saveToml(localDBFile, state);
 }
 
 
@@ -30,12 +31,12 @@ saveToml(String name, GlobalState state) async {
   Map<String, dynamic> tomlTemplate = {'bucket': state.bucket};
   var tomlDB = TomlDocument.fromMap(tomlTemplate).toString();
   var file = File(localDBFile);
-  file.writeAsString(tomlDB.toString());
+  file.writeAsString(tomlDB);
 }
 
 loadToml(String name) async {
   //load toml
   var document = await TomlDocument.load(name);
-  var documemnts = TomlDocument.parse(document.toString()).toMap();
-  return documemnts;
+  var documents = TomlDocument.parse(document.toString()).toMap();
+  return documents;
 }
