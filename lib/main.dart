@@ -47,6 +47,13 @@ void main() {
                   return AddMangaBookPage(state: state);
                 }),
             transition: Transition.fadeIn),
+        GetPage(
+            name: '/flash-cards',
+            page: () =>
+                Consumer<GlobalState>(builder: (context, state, widget) {
+                  return FlashCardsPage(state: state);
+                }),
+            transition: Transition.fadeIn),
       ],
     ),
     create: (context) => GlobalState(),
