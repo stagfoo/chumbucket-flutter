@@ -26,9 +26,11 @@ class Bubble {
 }
 
 class MangaBook {
+  String name = '';
   String cover = '';
   List<String> chapterDirs = [];
   List<Bubble> bubbles = [];
+  List<Word> words = [];
   String lastChapterRead = '';
   String lastPageRead = '';
 }
@@ -38,6 +40,7 @@ class GlobalState extends ChangeNotifier {
   //TODO rename book to currentBookFiles or something
   List<dynamic> book = [];
   MangaBook selectedBook = MangaBook();
+  Word? selectedWord;
   List<MangaBook> bookList = [];
   String addBookCover = '';
   List<String> addBookChapters = [];
