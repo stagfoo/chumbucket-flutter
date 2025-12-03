@@ -27,7 +27,18 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              // TODO: Implement settings action
+              Get.dialog(
+                AlertDialog(
+                  title: const Text('Settings'),
+                  content: const Text('Settings are not yet implemented.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: const Text('Close'),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         ],
@@ -41,6 +52,11 @@ class HomePage extends StatelessWidget {
       body: Consumer<GlobalState>(builder: (context, state, widget) {
         return MangaListView(state: state);
       }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.toNamed('/import'),
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.yellow,
+      ),
     );
   }
 }
@@ -56,11 +72,14 @@ class FlashCardsPage extends StatefulWidget {
 class _FlashCardsPageState extends State<FlashCardsPage> {
   bool _isFlipped = false;
   int _currentIndex = 0;
+  int _thumbsUp = 0;
+  int _thumbsDown = 0;
 
   @override
   Widget build(BuildContext context) {
     // Assuming flashcards are stored in the global state
-    final flashCards = widget.state.bookList.expand((book) => book.words).toList();
+    final flashCards =
+        widget.state.bookList.expand((book) => book.words).toList();
 
     if (flashCards.isEmpty) {
       return Scaffold(
@@ -104,13 +123,18 @@ class _FlashCardsPageState extends State<FlashCardsPage> {
   }
 
   Widget _buildProgressIndicator(int totalCards) {
-    // TODO: Implement actual progress tracking
     return Column(
       children: [
-        const Text("FLASH CARDS", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
-        Text("0 👍 / 0 👎", style: const TextStyle(color: Colors.white, fontSize: 18)),
+        const Text("FLASH CARDS",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold)),
+        Text("$_thumbsUp 👍 / $_thumbsDown 👎",
+            style: const TextStyle(color: Colors.white, fontSize: 18)),
         const SizedBox(height: 8),
-        Text("${_currentIndex + 1} / $totalCards", style: const TextStyle(color: Colors.white, fontSize: 16)),
+        Text("${_currentIndex + 1} / $totalCards",
+            style: const TextStyle(color: Colors.white, fontSize: 16)),
       ],
     );
   }
@@ -133,8 +157,13 @@ class _FlashCardsPageState extends State<FlashCardsPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(card.kanji, style: const TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold)),
-            Text(card.furagana, style: const TextStyle(color: Colors.white, fontSize: 24)),
+            Text(card.kanji,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold)),
+            Text(card.furagana,
+                style: const TextStyle(color: Colors.white, fontSize: 24)),
           ],
         ),
       ),
@@ -152,8 +181,8 @@ class _FlashCardsPageState extends State<FlashCardsPage> {
         IconButton(
           icon: const Icon(Icons.thumb_down, color: Colors.white, size: 48),
           onPressed: () {
-            // TODO: Implement review logic
             setState(() {
+              _thumbsDown++;
               _isFlipped = false;
               _currentIndex = (_currentIndex + 1) % totalCards;
             });
@@ -162,8 +191,8 @@ class _FlashCardsPageState extends State<FlashCardsPage> {
         IconButton(
           icon: const Icon(Icons.thumb_up, color: Colors.white, size: 48),
           onPressed: () {
-            // TODO: Implement review logic
             setState(() {
+              _thumbsUp++;
               _isFlipped = false;
               _currentIndex = (_currentIndex + 1) % totalCards;
             });
@@ -174,19 +203,20 @@ class _FlashCardsPageState extends State<FlashCardsPage> {
   }
 }
 
-class TagPage extends StatelessWidget {
+class TagPage extends StatefulWidget {
   final GlobalState state;
   const TagPage({Key? key, required this.state}) : super(key: key);
 
   @override
+  _TagPageState createState() => _TagPageState();
+}
+
+class _TagPageState extends State<TagPage> {
+  String _searchQuery = '';
+  Future<Word?>? _searchResult;
+
+  @override
   Widget build(BuildContext context) {
-    // TODO: Implement actual search functionality
-    final searchResult = Word();
-    searchResult.eng = "that";
-    searchResult.furagana = "これ";
-    searchResult.kanji = "-";
-
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("manabee"),
@@ -204,26 +234,27 @@ class TagPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // This assumes that the `GlobalState` has a `selectedBook` with a list of words.
-            // You might need to adjust this based on your actual state structure.
-            if (state.selectedBook != null)
-              _buildBookWordsSection(context, state.selectedBook.name, state.selectedBook.words),
+            if (widget.state.selectedBook != null)
+              _buildBookWordsSection(context, widget.state.selectedBook.name,
+                  widget.state.selectedBook.words),
             const SizedBox(height: 24),
-            _buildDictionarySection(context, searchResult),
+            _buildDictionarySection(context),
           ],
         ),
       ),
-      bottomNavigationBar: BottomBar(state: state),
+      bottomNavigationBar: BottomBar(state: widget.state),
     );
   }
 
-  Widget _buildBookWordsSection(BuildContext context, String bookTitle, List<Word> words) {
+  Widget _buildBookWordsSection(
+      BuildContext context, String bookTitle, List<Word> words) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           bookTitle,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white),
+          style:
+              Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white),
         ),
         const SizedBox(height: 8),
         ListView.builder(
@@ -238,16 +269,27 @@ class TagPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDictionarySection(BuildContext context, Word searchResult) {
+  Widget _buildDictionarySection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "Dictionary",
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white),
+          style:
+              Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white),
         ),
         const SizedBox(height: 8),
         TextField(
+          onChanged: (value) {
+            setState(() {
+              _searchQuery = value;
+            });
+          },
+          onSubmitted: (value) {
+            setState(() {
+              _searchResult = _searchWord(value);
+            });
+          },
           decoration: InputDecoration(
             hintText: "kore",
             filled: true,
@@ -260,9 +302,39 @@ class TagPage extends StatelessWidget {
           style: const TextStyle(color: Colors.white),
         ),
         const SizedBox(height: 8),
-        WordCard(word: searchResult),
+        if (_searchResult != null)
+          FutureBuilder<Word?>(
+            future: _searchResult,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return const Center(
+                    child: Text("Error", style: TextStyle(color: Colors.red)));
+              }
+              if (snapshot.hasData) {
+                return WordCard(word: snapshot.data!);
+              }
+              return const Center(
+                  child: Text("No results", style: TextStyle(color: Colors.white)));
+            },
+          ),
       ],
     );
+  }
+
+  Future<Word?> _searchWord(String query) async {
+    final result = await searchWord(query);
+    if (result.isNotEmpty) {
+      final firstResult = result.first;
+      final newWord = Word();
+      newWord.eng = firstResult.senses.first.englishDefinitions.first;
+      newWord.furagana = firstResult.japanese.first.reading;
+      newWord.kanji = firstResult.japanese.first.word;
+      return newWord;
+    }
+    return null;
   }
 }
 
@@ -312,14 +384,13 @@ class MangaBookPage extends StatelessWidget {
         backgroundColor: Colors.black,
       ),
       backgroundColor: Colors.black,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => onPressCreateBubble(state),
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.yellow,
-      ),
       body: Stack(
         children: [
-          MangaBookView(state: state),
+          GestureDetector(
+            onTapUp: (details) =>
+                onTapCreateBubble(state, details.localPosition),
+            child: MangaBookView(state: state),
+          ),
           BubbleListView(),
           if (state.selectedWord != null) // Show the dictionary card if a word is selected
             Align(
@@ -370,7 +441,20 @@ class DictionaryCard extends StatelessWidget {
               word.eng,
               style: const TextStyle(color: Colors.white, fontSize: 18),
             ),
-            // TODO: Add tags, links, and other details from the design
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8.0,
+              children: word.tags.map((tag) => Chip(label: Text(tag))).toList(),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                TextButton(onPressed: () {}, child: Text('Play Audio')),
+                TextButton(onPressed: () {}, child: Text('Show inflections')),
+                TextButton(onPressed: () {}, child: Text('Links')),
+              ],
+            )
           ],
         ),
       ),
@@ -482,9 +566,24 @@ class MangaBookChapterSelect extends StatelessWidget {
                       ),
                 const SizedBox(height: 8),
                 // TODO: Implement page count logic
-                Text(
-                  "Page 0 of 0 Read",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                FutureBuilder<int>(
+                  future: _getChapterPageCount(book.lastChapterRead),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Text("Loading...", style: TextStyle(color: Colors.grey));
+                    }
+                    if (snapshot.hasError) {
+                      return const Text("Error", style: TextStyle(color: Colors.red));
+                    }
+                    final pageCount = snapshot.data ?? 0;
+                    final currentPage = book.lastPageRead.isNotEmpty
+                        ? int.tryParse(book.lastPageRead.split('/').last.split('.').first) ?? 0
+                        : 0;
+                    return Text(
+                      "Page $currentPage of $pageCount Read",
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                    );
+                  },
                 ),
               ],
             ),
@@ -492,6 +591,17 @@ class MangaBookChapterSelect extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<int> _getChapterPageCount(String chapterPath) async {
+    if (chapterPath.isEmpty) {
+      return 0;
+    }
+    final directory = Directory(chapterPath);
+    if (await directory.exists()) {
+      return directory.list().length;
+    }
+    return 0;
   }
 
   Widget _buildChapterList(GlobalState state) {
@@ -653,20 +763,42 @@ class BubbleItem extends StatelessWidget {
                   color: Colors.black,
                   borderRadius: BorderRadius.all(Radius.circular(4)),
                 ),
-                child: TextField(
-                  maxLines: 2,
-                  onTapOutside: (event) => {
-                    onBubbleTextChange(state, textFieldController.text, item),
+                child: GestureDetector(
+                  onTapUp: (details) {
+                    final RenderBox renderBox =
+                        context.findRenderObject() as RenderBox;
+                    final localPosition =
+                        renderBox.globalToLocal(details.globalPosition);
+                    final textSpan = TextSpan(
+                      text: textFieldController.text,
+                      style: const TextStyle(color: Colors.white),
+                    );
+                    final textPainter = TextPainter(
+                      text: textSpan,
+                      textDirection: TextDirection.ltr,
+                    );
+                    textPainter.layout();
+                    final position = textPainter.getPositionForOffset(localPosition);
+                    final wordRange = textPainter.getWordBoundary(position);
+                    final word = textFieldController.text.substring(wordRange.start, wordRange.end);
+                    onWordTapped(state, word);
                   },
-                  style: const TextStyle(color: Colors.white),
-                  keyboardType: TextInputType.text,
-                  controller: textFieldController,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
+                  child: TextField(
+                    maxLines: 2,
+                    onTapOutside: (event) => {
+                      onBubbleTextChange(
+                          state, textFieldController.text, item),
+                    },
+                    style: const TextStyle(color: Colors.white),
+                    keyboardType: TextInputType.text,
+                    controller: textFieldController,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                    ),
                   ),
                 ),
               )),
@@ -716,12 +848,12 @@ class MangaNavButtons extends StatelessWidget {
             icon: const Icon(Icons.arrow_back, color: Colors.white),
           ),
           Text(
-            "${state.currentPageNumber + 1} / ${state.book.length}",
+            "${state.currentPageNumber + 1} / ${state.currentBookFiles.length}",
             style: const TextStyle(color: Colors.white),
           ),
           IconButton(
             onPressed: () {
-              if (state.currentPageNumber < state.book.length - 1) {
+              if (state.currentPageNumber < state.currentBookFiles.length - 1) {
                 onPressNextPage(state);
               }
             },
@@ -745,7 +877,7 @@ class MangaBookView extends StatelessWidget {
             color: Colors.lime,
           ),
           child: Image.file(
-            state.book[state.currentPageNumber],
+            state.currentBookFiles[state.currentPageNumber],
           ),
         );
       });

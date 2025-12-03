@@ -7,7 +7,10 @@ import 'dart:io';
 import 'ui.dart';
 import 'store.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final globalState = GlobalState();
+  await globalState.loadState();
   runApp(ChangeNotifierProvider(
     child: GetMaterialApp(
       debugShowCheckedModeBanner: false,
@@ -56,6 +59,6 @@ void main() {
             transition: Transition.fadeIn),
       ],
     ),
-    create: (context) => GlobalState(),
+    create: (context) => globalState,
   ));
 }

@@ -43,15 +43,23 @@ Future<File> pickFile() async {
   }
 }
 
-Future<List> getFiles() async {
+Future<List<File>> getFiles() async {
   try {
     var root = await FilePicker.platform.getDirectoryPath();
-    var list = [];
-    List contents = Directory(root!).listSync();
+    var list = <File>[];
+    if (root == null) {
+      return list;
+    }
+    List contents = Directory(root).listSync();
     for (var fileOrDir in contents) {
       if (fileOrDir is File) {
-        //TODO filter by extension
-        list.add(fileOrDir);
+        var path = fileOrDir.path;
+        if (path.endsWith('.jpg') ||
+            path.endsWith('.jpeg') ||
+            path.endsWith('.png') ||
+            path.endsWith('.gif')) {
+          list.add(fileOrDir);
+        }
       }
     }
     return list;
@@ -62,18 +70,21 @@ Future<List> getFiles() async {
   }
 }
 
-Future<List<dynamic>> getFilesFromFolder(String root) async {
+Future<List<File>> getFilesFromFolder(String root) async {
   try {
-    var list = [];
+    var list = <File>[];
     List<FileSystemEntity> contents = Directory(root).listSync();
     for (var fileOrDir in contents) {
-      print(fileOrDir);
       if (fileOrDir is File) {
-        //TODO filter by extension
-        list.add(fileOrDir);
+        var path = fileOrDir.path;
+        if (path.endsWith('.jpg') ||
+            path.endsWith('.jpeg') ||
+            path.endsWith('.png') ||
+            path.endsWith('.gif')) {
+          list.add(fileOrDir);
+        }
       }
     }
-    //TODO can i do this without casting?
     return list;
   } catch (err) {
     print("Get Files from folder failed or canceled");
