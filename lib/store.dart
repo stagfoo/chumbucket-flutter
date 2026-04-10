@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:slugid/slugid.dart';
 import 'package:short_uuids/short_uuids.dart';
+import 'data_service.dart';
 
 var localDBFile = 'manabee-db.toml';
 
@@ -14,6 +15,7 @@ class Word {
   String furagana = '';
   String kanji = '';
   String meaning = '';
+  List<String> tags = [];
 }
 
 class Bubble {
@@ -26,6 +28,7 @@ class Bubble {
 }
 
 class MangaBook {
+  String id = const ShortUuid().generate();
   String name = '';
   String cover = '';
   List<String> chapterDirs = [];
@@ -36,9 +39,9 @@ class MangaBook {
 }
 
 class GlobalState extends ChangeNotifier {
+  final DataService _dataService = DataService();
   int currentPageNumber = 0;
-  //TODO rename book to currentBookFiles or something
-  List<dynamic> book = [];
+  List<File> currentBookFiles = [];
   MangaBook selectedBook = MangaBook();
   Word? selectedWord;
   List<MangaBook> bookList = [];
@@ -48,19 +51,31 @@ class GlobalState extends ChangeNotifier {
   List<Bubble> currentPageBubbles = [];
   int selectedChapter = 0;
 
-  void loadDefaultState(bookList, bubbleList) {
-    bookList = bookList;
-    bubbleList = bubbleList;
+  GlobalState() {
+    loadState();
   }
 
-  void loadMangaBook(files) {
-    book = files;
+  Future<void> loadState() async {
+    final state = await _dataService.loadState();
+    bookList = state.bookList;
+    bubbleList = state.bubbleList;
     notifyListeners();
+  }
+
+  Future<void> _saveState() async {
+    await _dataService.saveState(this);
+  }
+
+  void loadMangaBook(List<File> files) {
+    currentBookFiles = files;
+    notifyListeners();
+    _saveState();
   }
 
   void selectMangaBook(MangaBook book) {
     selectedBook = book;
     notifyListeners();
+    _saveState();
   }
 
   void setSelectedChapter(int i) {
@@ -71,11 +86,13 @@ class GlobalState extends ChangeNotifier {
   void setNewBookCover(file) {
     addBookCover = file;
     notifyListeners();
+    _saveState();
   }
 
   void addNewBookChapters(folder) {
     addBookChapters.add(folder);
     notifyListeners();
+    _saveState();
   }
 
   void resetAddNewBook() {
@@ -92,21 +109,25 @@ class GlobalState extends ChangeNotifier {
   void setBubbleList(List<Bubble> bubbles) {
     bubbleList = bubbles;
     notifyListeners();
+    _saveState();
   }
 
   void setBookList(List<MangaBook> list) {
     bookList = list;
     notifyListeners();
+    _saveState();
   }
 
   void addMangaBook(MangaBook book) {
     bookList.add(book);
     notifyListeners();
+    _saveState();
   }
 
   void addBubble(bubble) {
     bubbleList.add(bubble);
     notifyListeners();
+    _saveState();
   }
 
   void resetPage() {
@@ -121,6 +142,11 @@ class GlobalState extends ChangeNotifier {
 
   void prevPage() {
     currentPageNumber--;
+    notifyListeners();
+  }
+
+  void setSelectedWord(Word word) {
+    selectedWord = word;
     notifyListeners();
   }
 }

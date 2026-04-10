@@ -39,7 +39,8 @@ Future<void> reloadBubbleList(GlobalState state) async {
   List<Bubble> selectedMangaBubbles = [];
   selectedMangaBubbles.addAll(state.bubbleList);
   selectedMangaBubbles.retainWhere((element) {
-    return element.filename.path == state.book[state.currentPageNumber].path;
+    return element.filename.path ==
+        state.currentBookFiles[state.currentPageNumber].path;
   });
   state.setCurrentPageBubbles(selectedMangaBubbles);
 }
@@ -57,26 +58,37 @@ Future<void> onPressPrevPage(GlobalState state) async {
 void onPressCreateBubble(GlobalState state) {
   var nextBubble = Bubble();
   //Is this correct?
-  nextBubble.filename = state.book[state.currentPageNumber];
+  nextBubble.filename = state.currentBookFiles[state.currentPageNumber];
   nextBubble.x = 100;
   nextBubble.y = 100;
   nextBubble.text = '';
   state.addBubble(nextBubble);
   reloadBubbleList(state);
-  saveDB(localDBFile, state);
+}
+
+Future<void> onWordTapped(GlobalState state, String word) async {
+  final result = await searchWord(word);
+  if (result.isNotEmpty) {
+    final firstResult = result.first;
+    final newWord = Word();
+    newWord.eng = firstResult.senses.first.englishDefinitions.first;
+    newWord.furagana = firstResult.japanese.first.reading;
+    newWord.kanji = firstResult.japanese.first.word;
+    newWord.tags = firstResult.tags;
+    state.setSelectedWord(newWord);
+  }
 }
 
 void onTapCreateBubble(GlobalState state, Offset eventDetails) {
   var nextBubble = Bubble();
   //Is this correct?
-  nextBubble.filename = state.book[state.currentPageNumber];
+  nextBubble.filename = state.currentBookFiles[state.currentPageNumber];
   nextBubble.x = eventDetails.dx;
   nextBubble.y = eventDetails.dy;
   print(eventDetails);
   nextBubble.text = '';
   state.addBubble(nextBubble);
   reloadBubbleList(state);
-  saveDB(localDBFile, state);
 }
 
 void onDbTapDeleteBubble(GlobalState state, Bubble bubble) {
@@ -87,7 +99,6 @@ void onDbTapDeleteBubble(GlobalState state, Bubble bubble) {
   });
   state.setBubbleList(bubbleList);
   reloadBubbleList(state);
-  saveDB(localDBFile, state);
 }
 
 void onBubbleTextChange(GlobalState state, String value, Bubble bubble) {
@@ -100,7 +111,6 @@ void onBubbleTextChange(GlobalState state, String value, Bubble bubble) {
   bubbleList.add(bubble);
   state.setBubbleList(bubbleList);
   reloadBubbleList(state);
-  saveDB(localDBFile, state);
 }
 
 Future<void> onPressAddCover(GlobalState state) async {
@@ -121,67 +131,5 @@ Future<void> onPressSaveNewBook(GlobalState state) async {
   state.addMangaBook(newBook);
   state.resetAddNewBook();
   Get.toNamed('/home');
-  saveDB(localDBFile, state);
 }
 
-saveDB(String name, GlobalState state) async {
-  Map<String, dynamic> tomlTemplate = {'bookList': {}, 'bubbles': {}};
-  //TODO convert for loops
-  state.bookList.forEach((item) {
-    tomlTemplate['bookList'][const ShortUuid().generate().toString()] = {
-      'cover': item.cover,
-      'folder': File(item.cover).parent.path.toString(),
-      'chapterDirs': item.chapterDirs,
-    };
-  });
-  state.bubbleList.forEach((item) {
-    tomlTemplate['bubbles'][item.id.toString()] = {
-      'x': item.x,
-      'y': item.y,
-      'filename': item.filename.path,
-      'id': item.id,
-      'text': item.text,
-    };
-  });
-  var bookList = TomlDocument.fromMap(tomlTemplate).toString();
-  var file = File(localDBFile);
-  file.writeAsString(bookList.toString());
-}
-
-loadDB(String name) async {
-  //load toml
-  var document = await TomlDocument.load(name);
-  var documemnts = TomlDocument.parse(document.toString()).toMap();
-  return documemnts;
-}
-
-void loadConfig(GlobalState state) async {
-  if (await File(localDBFile).exists()) {
-    var fromDBState = await loadDB(localDBFile);
-    List<Bubble> nextBubbles = [];
-    List<MangaBook> nextBookList = [];
-    Map.from(fromDBState['bubbles']).forEach((key, value) {
-      var newBubble = Bubble();
-      newBubble.filename = File(value['filename']);
-      newBubble.x = value['x'];
-      newBubble.y = value['y'];
-      newBubble.text = value['text'];
-      newBubble.id = key;
-      nextBubbles.add(newBubble);
-    });
-    try {
-      Map.from(fromDBState['bookList']).forEach((key, value) {
-        var book = MangaBook();
-        book.cover = value['cover'];
-        book.chapterDirs = List<String>.from(value['chapterDirs'] as List);
-        nextBookList.add(book);
-      });
-      state.setBubbleList(nextBubbles);
-      state.setBookList(nextBookList);
-    } catch (err) {
-      print(err);
-    }
-  } else {
-    File(localDBFile).writeAsString('');
-  }
-}
